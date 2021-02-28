@@ -1,0 +1,8 @@
+export const SIGN_IN = 'SIGN_IN'
+export const STORE_PATH = 'STORE_PATH'
+export const SIGN_OUT = 'SIGN_OUT'
+export const SIGN_UP = 'SIGN_UP'
+export const AUTH_ERROR = 'AUTH_ERROR'
+export const FETCH_USER_DATA = 'FETCH_USER_DATA'
+export const NO_TOKEN = 'NO_TOKEN'
+export const REFRESH_LOGIN = 'REFRESH_LOGIN'
