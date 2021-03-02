@@ -25,7 +25,9 @@ class App extends React.Component{
             <div className="App">
                 <Router history={history}>
                     <Header/>
-                    <Routes/>
+                    <div className={'px-10'}>
+                        <Routes/>
+                    </div>
                 </Router>
             </div>
         );
