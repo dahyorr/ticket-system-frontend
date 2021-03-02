@@ -3,7 +3,7 @@ import {Switch, Route} from "react-router-dom";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
 import ProtectedRoute from "./auth/ProtectedRoute";
-import Home from "./views/Home";
+import Home from "./views/Dashboard";
 import NonProtectedRoute from "./auth/NonProtectedRoute";
 import NotFound from "./error/NotFound";
 

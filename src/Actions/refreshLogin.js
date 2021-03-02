@@ -5,8 +5,8 @@ import {AUTH_ERROR, REFRESH_LOGIN} from "./types";
 
 const refreshLogin = (token) => async dispatch => {
     try {
-        let expiryDate = JSON.parse(localStorage.getItem('expiryDate'))
-        if(expiryDate > Date()) {
+        let expiryDate = new Date(JSON.parse(localStorage.getItem('expiryDate')))
+        if(expiryDate > new Date()) {
             const r = await ticketApi.post('/auth/user/refresh/', {
                 token: token
             })
