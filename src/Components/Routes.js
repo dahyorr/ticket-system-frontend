@@ -1,20 +1,67 @@
 import React from 'react'
-import {Switch, Route} from "react-router-dom";
+import {Switch} from "react-router-dom";
+import {connect} from 'react-redux'
+import Layout from './common/Layout'
 import Login from "./auth/Login";
 import Register from "./auth/Register";
-import ProtectedRoute from "./auth/ProtectedRoute";
-import Home from "./views/Dashboard";
-import NonProtectedRoute from "./auth/NonProtectedRoute";
+import Dashboard from "./views/Dashboard";
+import {PrivateRoute, PublicRoute} from "./auth/RouteTypes";
 import NotFound from "./error/NotFound";
+import Header from './common/Header';
+import Tickets from './views/Tickets';
+import TicketView from './views/TicketView';
+import NewTicket from './views/NewTicket';
 
-const Routes = () =>{
+const Routes = ({isSignedIn}) =>{
     return(
         <Switch>
-            <NonProtectedRoute path={'/login'} exact component={Login}/>
-            <NonProtectedRoute path={'/Register'} exact component={Register}/>
-            <ProtectedRoute exact path={'/'} component={Home}/>
-            <Route component={NotFound}/>
+            <PublicRoute path={'/login'} exact authenticated={isSignedIn}>
+                <Header/>
+                <Login/>
+            </PublicRoute>
+
+            <PublicRoute path={'/Register'} exact authenticated={isSignedIn}>
+                <Header/>    
+                <Register/>
+            </PublicRoute>
+
+            <PrivateRoute exact path={'/'} authenticated={isSignedIn}>
+                <Layout>
+                    <Dashboard/>
+                </Layout>
+            </PrivateRoute>
+
+            <PrivateRoute exact path={'/tickets'} authenticated={isSignedIn}>
+                <Layout>
+                    <Tickets/>
+                </Layout>
+            </PrivateRoute>
+
+
+
+            <PrivateRoute exact path={'/tickets/create'} authenticated={isSignedIn}>
+                <Layout>
+                    <Dashboard/>
+                </Layout>
+            </PrivateRoute>
+            <PrivateRoute exact path={'/tickets/:id'} authenticated={isSignedIn}>
+                <Layout>
+                    <TicketView/>
+                </Layout>
+            </PrivateRoute>
+
+            <PublicRoute>
+                <Layout>
+                    <NotFound/>
+                </Layout>
+            </PublicRoute>
         </Switch>
     )
 }
-export default Routes
+
+const mapStateToProps = state =>{
+    return{
+        isSignedIn: state.auth.isSignedIn
+    }
+}
+export default connect(mapStateToProps)(Routes);

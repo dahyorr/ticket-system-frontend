@@ -1,24 +1,23 @@
 import React from 'react'
+import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from 'react-toastify'
 import LoginForm from "../forms/LoginForm";
-import {connect} from 'react-redux'
-import {storePage} from "../../Actions";
 
 class Login extends React.Component {
-    componentDidMount() {
-        this.props.storePage('Login')
-    }
     render() {
         return (
-                <div className={'Login px-20'}>
-                    <p className={'mt-8 rounded-md bg-red-200 text-md w-1/2 content-center text-center m-auto'}>{this.props.error ? this.props.error: null}</p>
-                    <LoginForm/>
+                <div className={'Login'}>
+                    <ToastContainer/>
+                    <div className="content">
+                        <div className="logo"><h1>Ticketrr</h1></div>
+                        <h2>Sign in to your account</h2>
+                        <div className="form-container">
+                            <LoginForm toast={toast}/>
+                        </div>
+                    </div>
                 </div>
         )
     }
 }
-const mapStateToProps = state =>{
-    return {
-        error: state.auth.error
-    }
-}
-export default connect(mapStateToProps, {storePage})(Login)
+
+export default (Login)

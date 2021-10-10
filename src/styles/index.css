@@ -1,10 +1,15 @@
-@import url("https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap");
 body {
   font-family: "Roboto", sans-serif;
   line-height: 1.4;
   position: relative;
   min-height: 100vh;
+  background: #f9fafb;
+}
+
+ul {
+  list-style: none;
 }
 
 * {
@@ -14,10 +19,12 @@ body {
 }
 
 .container {
-  max-width: 1280px;
+  max-width: 90%;
   padding: 0 1.5rem;
   margin: auto;
   overflow: hidden;
+  height: 100%;
+  width: 100%;
 }
 
 .py-1 {
@@ -97,6 +104,10 @@ p {
   text-align: center;
 }
 
+.text-green {
+  color: green;
+}
+
 .text-error {
   font-size: 1.4rem;
   color: #d45050;
@@ -124,22 +135,315 @@ p {
   background: #b36d74;
 }
 
-.Header nav {
-  background-color: #F7C59F;
-  margin-bottom: 0.5rem;
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
-.Header nav .wrap {
+
+.Header {
+  background-color: #f3be95;
+  height: 70px;
+  padding: 0 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  z-index: 2;
+  position: fixed;
+  width: 100%;
+  top: 0;
+}
+.Header .nav {
+  display: flex;
+}
+.Header .nav .logo {
+  font-family: "Dancing Script", cursive;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2D3047;
+  margin-right: 1rem;
+}
+.Header .nav ul {
+  display: flex;
   align-items: center;
 }
-.Header nav .wrap .logo {
-  font-family: "Dancing Script", cursive;
-  color: #2D3047;
-  font-weight: 700;
-  font-size: 2.25rem;
-  line-height: 2.5rem;
+.Header .nav ul .nav-item {
+  background-color: #314e5d;
+  margin-left: 1rem;
+  padding: 0.5rem 0.9rem;
+  font-size: 0.9rem;
+  border-radius: 10px;
 }
-.Header nav .wrap .logo:hover {
-  color: #212434;
+.Header .nav ul .nav-item:hover {
+  background-color: #5B85AA;
+}
+.Header .user {
+  display: flex;
+  position: relative;
+}
+.Header .user button {
+  font-size: 1.2rem;
+  height: 45px;
+  width: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border: none;
+  background-color: #314e5d;
+  margin-left: 0.75rem;
+  cursor: pointer;
+}
+.Header .user button:hover {
+  background-color: #5B85AA;
+}
+.Header .user .dropdown {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  color: #2D3047;
+  height: fit-content;
+  top: 50px;
+  right: 0;
+  border-radius: 10px;
+  width: 150px;
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  box-sizing: initial;
+}
+.Header .user .dropdown .dropdown-item {
+  color: #2D3047;
+  text-align: center;
+  padding: 0.25rem 1.25rem;
+  border-bottom: 1px solid #999;
+}
+.Header .user .dropdown .dropdown-item:last-child {
+  border: none;
+  border-radius: 0 0 10px 10px;
+}
+.Header .user .dropdown .dropdown-item:first-child {
+  border-radius: 10px 10px 0 0;
+}
+.Header .user .dropdown .dropdown-item:hover {
+  background-color: #f7f7f7;
+}
+
+.SideNav {
+  width: 280px;
+  height: 100vh;
+  background: #f3be95;
+  padding-top: 80px;
+  z-index: 1;
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+}
+.SideNav .nav {
+  width: 100%;
+}
+.SideNav .nav .nav-item {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  margin-bottom: 0.3rem;
+  align-items: center;
+  cursor: pointer;
+}
+.SideNav .nav .nav-item .icon {
+  margin-left: 1rem;
+}
+.SideNav .nav .nav-item p {
+  margin-left: 1.5rem;
+  font-size: 1.1rem;
+}
+.SideNav .nav .nav-item:hover {
+  background-color: #f0b07e;
+}
+.SideNav .nav .nav-item.active {
+  background-color: #314e5d;
+}
+@media screen and (max-width: 1280px) {
+  .SideNav {
+    width: 50px;
+  }
+  .SideNav a p {
+    display: none;
+  }
+}
+
+.Viewport {
+  width: calc(100% - 280px);
+  height: 100vh;
+  padding: 70px 0 0 0;
+}
+@media screen and (max-width: 1280px) {
+  .Viewport {
+    width: calc(100% - 50px);
+  }
+}
+
+.Form {
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem 1rem;
+}
+
+.LoginForm .error .form-error {
+  text-align: center;
+  color: red;
+}
+.LoginForm .form-group {
+  margin-bottom: 2rem;
+}
+.LoginForm input, .LoginForm button {
+  width: 100%;
+  height: 40px;
+}
+.LoginForm input {
+  border: 1px solid #9a9a9a;
+  padding: 0.2rem 0.5rem;
+  outline: none;
+  background: white;
+  font-size: 0.9rem;
+}
+.LoginForm input:first-of-type {
+  border-radius: 10px 10px 0 0;
+  border-bottom: none;
+}
+.LoginForm input:last-of-type {
+  border-radius: 0 0 10px 10px;
+  border-top: none;
+}
+.LoginForm input:focus {
+  border: 3px solid #f3be95;
+  z-index: 5;
+}
+.LoginForm button {
+  background: #f3be95;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  position: relative;
+}
+.LoginForm button:hover {
+  background: #f0b07e;
+}
+.LoginForm button .icon {
+  position: absolute;
+  color: #f7d2b5;
+  left: 15px;
+}
+.LoginForm .no-account {
+  text-align: center;
+}
+.LoginForm .no-account a {
+  color: #5B85AA;
+}
+.LoginForm .no-account a:hover {
+  text-decoration: underline;
+}
+
+.Login, .Register {
+  min-height: calc(100vh - 70px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.Login .content, .Register .content {
+  width: 800px;
+  height: 500px;
+  padding: 1rem;
+  margin-bottom: 150px;
+  border-radius: 10px;
+}
+.Login .content .logo, .Register .content .logo {
+  margin: 0 auto;
+  text-align: center;
+  font-family: "Dancing Script", cursive;
+  font-size: 1.75rem;
+  color: #2D3047;
+}
+.Login .content h2, .Register .content h2 {
+  text-align: center;
+}
+.Login .content .form-container, .Register .content .form-container {
+  margin: 1rem auto 0 auto;
+  width: 500px;
+}
+
+.Dashboard {
+  height: 100%;
+}
+.Dashboard .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.Dashboard .platform {
+  border-radius: 25px;
+  background: #f9fafb;
+  box-shadow: 32px 32px 64px #edeeee, -32px -32px 64px #ffffff;
+  height: 100%;
+  width: 100%;
+}
+
+.Tickets {
+  height: 100%;
+}
+.Tickets .container {
+  height: 100%;
+  width: 100%;
+  padding: 1rem 1.5rem;
+}
+.Tickets .container .tickets-list {
+  width: 100%;
+  min-height: 600px;
+  max-height: 100%;
+  background: white;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+}
+.Tickets .container .tickets-list .header {
+  background: #5B85AA;
+  display: flex;
+  align-items: center;
+  height: 80px;
+  padding-left: 15px;
+  color: white;
+}
+.Tickets .container .tickets-list .list {
+  height: 100%;
+}
+.Tickets .container .tickets-list .list .list-item {
+  margin: none;
+  background: #F9FAFB;
+  border-bottom: 1px solid grey;
+  transition: 0.25s all;
+  padding: 0 1rem;
+  cursor: pointer;
+  display: flex;
+  color: black;
+  justify-content: space-between;
+}
+.Tickets .container .tickets-list .list .list-item:hover {
+  background: #ADADAE;
+}
+.Tickets .container .tickets-list .list .list-item .title {
+  width: 70%;
+}
+.Tickets .container .tickets-list .list .list-item .date {
+  width: 10%;
+}
+.Tickets .container .tickets-list .list .list-item .status {
+  width: 10%;
 }
 
 /*# sourceMappingURL=index.css.map */

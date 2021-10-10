@@ -1,11 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
+@import "variables";
+
 body{
   font-family: 'Roboto', sans-serif;
   line-height: 1.4;
   position: relative;
   min-height: 100vh;
+  background: $background;
 }
+ul{list-style: none;}
 *{
   margin: 0;
   padding: 0;
@@ -16,6 +20,8 @@ body{
   padding: 0 1.5rem;
   margin: auto;
   overflow: hidden;
+  height: 100%;
+  width: 100%;
 }
 .py-1{padding: 1.5rem 0;}
 .py-2{padding: 2rem 0;}
@@ -49,6 +55,9 @@ p{
 .text-center{
   text-align: center;
 }
+.text-green{
+  color: green;
+}
 .text-error{
   font-size: 1.4rem;
   color: #d45050;
@@ -73,4 +82,14 @@ p{
     }
   }
 }
-
+.sr-only{
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

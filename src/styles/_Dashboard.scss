@@ -1,4 +1,18 @@
+@import "variables";
+
 .Dashboard{
     height: 100%;
-    
+    .container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .platform{
+        border-radius: 25px;
+        background: #f9fafb;
+        box-shadow:  32px 32px 64px #edeeee,
+        -32px -32px 64px #ffffff;
+        height: 100%;
+        width: 100%;
+    }
 }

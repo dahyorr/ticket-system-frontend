@@ -1,12 +1,14 @@
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
-function Tickets({fetchTickets, tickets, error}) {
+function Tickets({fetchTickets, tickets, error, history}) {
 
     console.log(tickets)
+
     return (
         <div className="Tickets">
             <div className="container">
+                <button onClick={() => history.push('/tickets/create')}>New Ticket</button>
                 <div className="tickets-list">
                     <div className="header">
                         <h1>All Tickets</h1>
@@ -31,4 +33,4 @@ const mapStateToProps = ({tickets}) =>({
     error: tickets.error
 })
 
-export default connect(mapStateToProps)(Tickets)
+export default connect(mapStateToProps)(withRouter(Tickets))
