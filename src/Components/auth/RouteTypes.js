@@ -3,13 +3,13 @@ import {useAuth} from '../../hooks'
 import Layout from '../common/Layout'
 
 export const PrivateRoute = ({component: Component, path, ...props}) => {
-    const {user} = useAuth()
+    const {isSignedIn} = useAuth()
     return (
         <Route 
         path={path} 
         {...props}
         render={props => {
-            return user 
+            return isSignedIn  
             ? <Layout><Component {...props}/></Layout>
             : <Redirect to="/login"/>
         }} 
@@ -18,13 +18,13 @@ export const PrivateRoute = ({component: Component, path, ...props}) => {
 }
 
 export const PublicRoute = ({component: Component, path, ...props}) => {
-    const {user} = useAuth()
+    const {isSignedIn} = useAuth()
     return (
         <Route 
         path={path} 
         {...props}
         render={props => {
-            return user 
+            return isSignedIn 
             ? <Redirect to="/"/>
             : <Layout><Component {...props}/></Layout>
         }} 

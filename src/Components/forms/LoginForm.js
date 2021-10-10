@@ -3,11 +3,7 @@ import {Formik, Form, Field, ErrorMessage} from 'formik'
 import {FaLock} from 'react-icons/fa'
 import * as Yup from 'yup'
 
-const LoginForm= ({error, clearError, toast}) => {
-    if(error){
-        toast.error(error)
-        clearError()
-    }
+const LoginForm= ({onFormSubmit}) => {
     return(
         <Formik
             initialValues={{ 
@@ -15,7 +11,7 @@ const LoginForm= ({error, clearError, toast}) => {
                 password: '', 
             }}
             onSubmit={values => {
-                console.log(values)
+                onFormSubmit(values)
             }}
             validationSchema={Yup.object({
                 email: Yup.string().email('Please provide a vaild email').required('You must provide a valid email'),
@@ -27,12 +23,10 @@ const LoginForm= ({error, clearError, toast}) => {
                 <div className="error">
                     <p className={'form-error'}><ErrorMessage name='email' /></p>
                     <p className={'form-error'}><ErrorMessage name='password'/></p>
-                    {/* <p className={'form-error'}>{error}</p> */}
                 </div>
                 <div className="form-group">
                     <label htmlFor="email" className="sr-only">Email</label>
                     <Field name='email' type="email"  placeholder="Email"/>
-                    {/* {divider?<hr className='solid'/>:null} */}
                     <div style={{borderBottom:'1px solid grey'}}></div>
                     <label htmlFor="password" className="sr-only">Password</label>
                     <Field name='password' type="password" placeholder='Password'/>

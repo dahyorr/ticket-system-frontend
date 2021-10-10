@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 
 function Tickets({ tickets, history}) {
 
@@ -14,12 +14,12 @@ function Tickets({ tickets, history}) {
                     </div>
                     <div className="list">
 
-                {tickets.map(ticket => 
+                {/* {tickets.map(ticket => 
                     <Link to={`/tickets/${ticket.id}`} className='list-item'>
                         <p className='title'>{ticket.title}</p>
                         <p className='date'>{new Date(ticket.created_date).toLocaleDateString()}</p>
                         {ticket.status? <p className='text-green status'>Open</p>: <p className='status'>Open</p> }
-                    </Link>)}                        
+                    </Link>)}                         */}
                     </div>
                 </div>
             </div>

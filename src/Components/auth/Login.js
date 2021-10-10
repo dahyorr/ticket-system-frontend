@@ -2,15 +2,29 @@ import React from 'react'
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify'
 import LoginForm from "../forms/LoginForm";
+import {useAuth} from '../../hooks'
 
-const Login = () => {
+const Login = ({history}) => {
+    const {logIn} = useAuth() 
+
+    const onLogin = async ({email, password}) => {
+        // TODO: showLoader
+        const res = await logIn(email, password)
+        if (res.status === 'error'){
+            toast.error(res.message)
+        }
+        else{
+            history.push('/')
+        }
+    }
+
     return (
             <div className={'Login'}>
                 <div className="content">
                     <div className="logo"><h1>Ticketrr</h1></div>
                     <h2>Sign in to your account</h2>
                     <div className="form-container">
-                        <LoginForm toast={toast}/>
+                        <LoginForm onFormSubmit={onLogin}/>
                     </div>
                 </div>
             </div>
