@@ -1,10 +1,9 @@
-import {connect} from 'react-redux'
 import Header from './Header'
 import SideNav from './SideNav'
 import Viewport from './Viewport'
-
-function Layout({isSignedIn, children}) {
-    console.log(isSignedIn)
+import {useAuth} from '../../hooks'
+function Layout({children}) {
+    const {isSignedIn} = useAuth()
     return (
         <>
         <Header/>
@@ -18,10 +17,4 @@ function Layout({isSignedIn, children}) {
     )
 }
 
-const mapStateToProps = (state) =>{
-    return{
-        isSignedIn: state.auth.isSignedIn,
-    }
-}
-
-export default connect(mapStateToProps)(Layout)
+export default Layout

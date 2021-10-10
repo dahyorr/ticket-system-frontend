@@ -1,35 +1,33 @@
 import React, {useState, useEffect} from 'react';
-import Loader from '../components/Loader';
-import {auth} from '../helpers/firebase'
+import Loader from '../Components/common/Loader';
+
 
 export const Context = React.createContext({})
-const firebaseAuth = auth.getAuth();
 
 export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null)
-    const [loading, setLoading] = useState(true)
+    const [isSignedIn, setIsSignedIn] = useState(null)
+    const [loading, setLoading] = useState(false)
     
     
-    const signUp = (email, password) => {
-        return auth.createUserWithEmailAndPassword(firebaseAuth, email, password)
+    const signUp = (name, email, password) => {
+        return console.log('signup')
     }
 
     const logIn = (email, password) => {
-        return auth.signInWithEmailAndPassword(firebaseAuth, email, password)
+        return console.log('signin')
     }
 
     const signOut = () => {
-        return auth.signOut(firebaseAuth)
+        return console.log('signout')
     }
 
     useEffect(() => {
-        return auth.onAuthStateChanged(firebaseAuth, (currentUser => {
-            setUser(currentUser)
-            setLoading(false)
-        }))
+        console.log('check auth')
+        return () => console.log('clear events')
     }, []);
 
-    const value = {user, loading, signUp, logIn, signOut}
+    const value = {user, loading, signUp, logIn, signOut, isSignedIn}
 
     return(
         <Context.Provider value={value}>

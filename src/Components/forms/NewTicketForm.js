@@ -1,5 +1,4 @@
 import {Link} from 'react-router-dom'
-import {connect} from 'react-redux'
 import {Formik, Form, Field, ErrorMessage} from 'formik' 
 import * as Yup from 'yup'
 
@@ -11,7 +10,7 @@ const LoginForm = ({onFormSubmit, formError}) => {
                             password: '', 
                         }}
                         onSubmit={values => {
-                            onFormSubmit(values)
+                            console.log(values)
                         }}
                         validationSchema={Yup.object({
                             email: Yup.string().email('Please provide a vaild email').required('You must provide a valid email'),
@@ -43,8 +42,4 @@ const LoginForm = ({onFormSubmit, formError}) => {
     )
 }
 
-const mapStateToProps = (state) =>({
-    formError: state.auth.error
-})
-
-export default connect(mapStateToProps)(LoginForm)
+export default LoginForm

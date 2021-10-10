@@ -1,7 +1,6 @@
-import { connect } from 'react-redux'
-import { Link, withRouter } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
-function Tickets({fetchTickets, tickets, error, history}) {
+function Tickets({ tickets, history}) {
 
     console.log(tickets)
 
@@ -28,9 +27,4 @@ function Tickets({fetchTickets, tickets, error, history}) {
     )
 }
 
-const mapStateToProps = ({tickets}) =>({
-    tickets: tickets.tickets,
-    error: tickets.error
-})
-
-export default connect(mapStateToProps)(withRouter(Tickets))
+export default Tickets

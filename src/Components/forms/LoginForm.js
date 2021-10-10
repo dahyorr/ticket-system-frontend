@@ -2,14 +2,8 @@ import {Link} from 'react-router-dom'
 import {Formik, Form, Field, ErrorMessage} from 'formik' 
 import {FaLock} from 'react-icons/fa'
 import * as Yup from 'yup'
-import {connect} from 'react-redux'
-import signIn from "../../Actions/signIn";
-import { clearError } from '../../Actions/error'
 
-
-
-const LoginForm= ({signIn,error, clearError, toast}) => {
-    // const [divider, setDivider] = useState(true)
+const LoginForm= ({error, clearError, toast}) => {
     if(error){
         toast.error(error)
         clearError()
@@ -21,7 +15,7 @@ const LoginForm= ({signIn,error, clearError, toast}) => {
                 password: '', 
             }}
             onSubmit={values => {
-                signIn(values)
+                console.log(values)
             }}
             validationSchema={Yup.object({
                 email: Yup.string().email('Please provide a vaild email').required('You must provide a valid email'),
@@ -51,10 +45,4 @@ const LoginForm= ({signIn,error, clearError, toast}) => {
     )
 }
 
-const mapStateToProps = state =>{
-    return {
-        error: state.auth.error
-    }
-}
-
-export default connect(mapStateToProps, {signIn, clearError})(LoginForm)
+export default LoginForm

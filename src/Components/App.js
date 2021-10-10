@@ -1,46 +1,41 @@
 import React from 'react'
-import {Router} from "react-router-dom";
-import {connect} from 'react-redux'
-import history from "../history";
-import noToken from "../Actions/noToken";
-import refreshLogin from "../Actions/refreshLogin";
-import Routes from "./Routes";
-import fetchTickets from '../Actions/fetchTickets'
+import {BrowserRouter, Switch, Route} from "react-router-dom";
+import {PrivateRoute, PublicRoute} from "./auth/RouteTypes";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import Login from './auth/Login';
+import Register from './auth/Register';
+import Dashboard from './views/Dashboard';
+import Tickets from './views/Tickets';
+import TicketView from './views/TicketView';
+import NotFound from "./error/NotFound";
+import Layout from './common/Layout'
+import { AuthProvider } from "../context/AuthContext";
 
-class App extends React.Component{
-    constructor(props){
-        super(props)
-        const token = localStorage.getItem('accessToken')
-        const refresh = localStorage.getItem('refreshToken')
-        if(token && refresh){
-            this.props.refreshLogin(refresh)
-        }
-        else{
-            this.props.noToken()
-        }
-    }
+const App = () =>{
+    return (
+        <div className="App">
+            <AuthProvider>
+                <ToastContainer/>
+                <BrowserRouter>
+                    <Switch>
+                        <PublicRoute path={'/login'}  component={Login}/>
+                        <PublicRoute path={'/register'}  component={Register}/>
+                        <PrivateRoute path={'/'} exact component={Dashboard}/>
+                        <PrivateRoute path={'/tickets'} exact component={Tickets}/>
+                        <PrivateRoute path={'/tickets/create'}  component={Dashboard}/> {/* change */}
+                        <PrivateRoute path={'/tickets/:id'} component={TicketView}/> {/* change */}
 
-    componentDidMount(){
-        this.props.fetchTickets()
-    }
-
-    render() {
-        if(this.props.authLoading) return(
-            <h1>Loading...</h1>
-        )
-        else return (
-            <div className="App">
-                <Router history={history}>
-                        <Routes/>
-                </Router>
-            </div>
-        );
-    }
+                        <Route render={(props) => (
+                            <Layout>
+                                <NotFound {...props}/>
+                            </Layout>
+                        )}/>
+                    </Switch>
+                </BrowserRouter>
+            </AuthProvider>
+        </div>
+    );
 }
-const mapStateToProps = state =>{
-    return{
-        isSignedIn: state.auth.isSignedIn,
-        authLoading: state.auth.loading
-    }
-}
-export default connect(mapStateToProps, {refreshLogin, noToken, fetchTickets})(App);
+
+export default App;

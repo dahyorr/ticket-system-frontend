@@ -1,16 +1,14 @@
 import React,{useState} from 'react'
-import {connect} from 'react-redux'
+import {useAuth} from '../../hooks'
 import {FaUser, FaBell} from 'react-icons/fa'
-import signOut from "../../Actions/signOut";
 import {Link, withRouter} from "react-router-dom";
 
-
-
-const Header = ({location: {pathname}, signOut, isSignedIn})=> {
+const Header = ({location: {pathname}})=> {
     // const menuRef = useRef('menu')
     // const dropdownRef = useRef('dropdown')
     // const [menuOpen, setMenuOpen] = useState(false)
     const [dropdownOpen, setDropdownOpen] = useState(false)
+    const {isSignedIn, signOut } = useAuth()
     
     // const renderedNavLinks = (links) => links.map((link, index) =>(
     //     <li key={index}>
@@ -55,10 +53,4 @@ const Header = ({location: {pathname}, signOut, isSignedIn})=> {
     )
 }
 
-    const mapStateToProps = state =>{
-    return{
-        auth: state.auth,
-        isSignedIn: state.auth.isSignedIn,
-    }
-}
-export default connect(mapStateToProps, {signOut})(withRouter(Header))
+export default withRouter(Header)
