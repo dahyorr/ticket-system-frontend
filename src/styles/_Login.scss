@@ -1,0 +1,26 @@
+.Login, .Register{
+    min-height: calc(100vh - 70px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .content{
+        width: 800px;
+        height: 500px;
+        padding: 1rem;
+        margin-bottom: 150px;
+        border-radius: 10px;
+
+        .logo{
+            margin: 0 auto;
+            text-align: center;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.75rem;
+            color: $space-color;
+        }
+        h2{text-align: center}
+        .form-container{
+            margin: 1rem auto 0 auto;
+            width: 500px;
+        }
+    }
+}
