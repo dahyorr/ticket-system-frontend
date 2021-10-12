@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Loader from '../Components/common/Loader';
-import ticketApi from "../api/ticketApi";
-import {login, userData, refresh} from "../api/apiRoutes";
+import TicketApi from "../api/ticketApi";
+import {login, userData, refresh, register} from "../api/apiRoutes";
 
 
 export const Context = React.createContext({})
@@ -12,22 +12,33 @@ export const AuthProvider = ({children}) => {
     const [loading, setLoading] = useState(true)
     
     
-    const signUp = (name, email, password) => {
-        return console.log('signup')
+    const signUp = async (name, email, password) => {
+        try{
+            const response  = await TicketApi.post(register, {name, email, password})
+            return {status: 'success', message: response.data.message}
+        }
+        catch(err){
+            let message = 'An Error has occurred'
+            console.log({...err})
+            if(err.response && err.response.data.email){
+                message = 'This email has already been used'
+            }
+            return {status: 'error', message}
+        }
     }
 
     const logIn = async (email, password) => {
         try{
-            const response = await ticketApi.post(login, { email, password})
+            const response = await TicketApi.post(login, { email, password})
             const {access, refresh} = response.data
             localStorage.setItem('accessToken', access)
             localStorage.setItem('refreshToken', refresh)
-            localStorage.setItem('tokenExpires', Date.now() + (1440 * 60))
+            localStorage.setItem('tokenExpires', Date.now() + (5 * 60))
             setIsSignedIn(true)
             return {status: 'success'}
         }
         catch(err){
-            const message = err.response.data.detail || 'An Error has occurred, Check Your network connection'
+            const message = err.response.data.detail || 'An Error has occurred'
             return {status: 'error', message}
         }
     }
@@ -48,7 +59,7 @@ export const AuthProvider = ({children}) => {
             (async () => {
                 try{
                     const refreshToken = localStorage.getItem('refreshToken')
-                    const response = await ticketApi.post(refresh, {refresh: refreshToken})
+                    const response = await TicketApi.post(refresh, {refresh: refreshToken})
                     localStorage.setItem('accessToken', response.data.access)
 
                 }
@@ -61,7 +72,7 @@ export const AuthProvider = ({children}) => {
         if(token && !isSignedIn){
             (async () => {
                 try{
-                    const response = await ticketApi.get(userData, {
+                    const response = await TicketApi.get(userData, {
                         headers: { 'Authorization': 'Bearer ' + token}
                     })
                     const {email, name} = response.data

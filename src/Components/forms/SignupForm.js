@@ -3,11 +3,7 @@ import {Formik, Form, Field, ErrorMessage} from 'formik'
 import {FaLock} from 'react-icons/fa'
 import * as Yup from 'yup'
 
-const LoginForm= ({error, clearError, toast}) => {
-    if(error){
-        toast.error(error)
-        clearError()
-    }
+const LoginForm= ({onFormSubmit}) => {
     return(
         <Formik
             initialValues={{ 
@@ -16,7 +12,7 @@ const LoginForm= ({error, clearError, toast}) => {
                 password: '', 
             }}
             onSubmit={values => {
-                console.log(values)
+                onFormSubmit(values)
             }}
             validationSchema={Yup.object({
                 name: Yup.string(),
@@ -34,10 +30,8 @@ const LoginForm= ({error, clearError, toast}) => {
                 <div className="form-group">
                     <label htmlFor="name" className="sr-only">Name</label>
                     <Field classname='form-input' name='name' type="text" placeholder="Name"/>
-                    {/* {divider?<hr className='solid'/>:null} */}
                     <label htmlFor="email" className="sr-only">Email</label>
                     <Field classname='form-input' name='email' type="email" placeholder="Email"/>
-                    {/* {divider?<hr className='solid'/>:null} */}
                     <label htmlFor="password" className="sr-only">Password</label>
                     <Field classname='form-input' name='password' type="password" placeholder='Password'/>
                 </div>

@@ -1,4 +1,19 @@
 // import { Link } from 'react-router-dom'
+import MUIDataTable from "mui-datatables";
+import { createTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
+const tableColumns = ["Name", "Status", 'Last Activity', "Created By", "Date Created"];
+const tableData = []
+const tableOptions = {
+    filterType: 'checkbox',
+    tableBodyMaxHeight: '100%'
+};
+
+const getMuiTheme = () => createTheme({
+    overrides:{
+
+    }
+})
 
 function Tickets({ tickets, history}) {
 
@@ -7,21 +22,14 @@ function Tickets({ tickets, history}) {
     return (
         <div className="Tickets">
             <div className="container">
-                <button onClick={() => history.push('/tickets/create')}>New Ticket</button>
-                <div className="tickets-list">
-                    <div className="header">
-                        <h1>All Tickets</h1>
-                    </div>
-                    <div className="list">
-
-                {/* {tickets.map(ticket => 
-                    <Link to={`/tickets/${ticket.id}`} className='list-item'>
-                        <p className='title'>{ticket.title}</p>
-                        <p className='date'>{new Date(ticket.created_date).toLocaleDateString()}</p>
-                        {ticket.status? <p className='text-green status'>Open</p>: <p className='status'>Open</p> }
-                    </Link>)}                         */}
-                    </div>
-                </div>
+            {/* <MuiThemeProvider theme={getMuiTheme()}> */}
+                <MUIDataTable
+                    title={"All Tickets"}
+                    data={tableData}
+                    columns={tableColumns}
+                    // options={tableOptions}
+                />
+            {/* </MuiThemeProvider> */}
             </div>
         </div>
     )
