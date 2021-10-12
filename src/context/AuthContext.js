@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import Loader from '../Components/common/Loader';
 import TicketApi from "../api/ticketApi";
-import {login, userData, refresh, register} from "../api/apiRoutes";
+import {login, userData, refresh, register, verify} from "../api/apiRoutes";
+import ticketApi from '../api/ticketApi';
 
 
 export const Context = React.createContext({})
@@ -52,19 +53,23 @@ export const AuthProvider = ({children}) => {
     }
 
     useEffect(() => {
-        const token = localStorage.getItem('accessToken')
+        let token = localStorage.getItem('accessToken')
         const expiryTime = parseInt(localStorage.getItem('tokenExpires'))
 
         if(expiryTime && Date.now() >= expiryTime){
             (async () => {
                 try{
                     const refreshToken = localStorage.getItem('refreshToken')
-                    const response = await TicketApi.post(refresh, {refresh: refreshToken})
-                    localStorage.setItem('accessToken', response.data.access)
-
+                    if(refreshToken){
+                        const response = await TicketApi.post(refresh, {refresh: refreshToken})
+                        localStorage.setItem('accessToken', response.data.access)
+                        localStorage.setItem('tokenExpires', Date.now() + (5*60))
+                        token = response.data.access
+                    }
                 }
                 catch(err){
                     console.log(err)
+                    localStorage.setItem('accessToken', '')
                 }
             })()
         }
@@ -72,19 +77,36 @@ export const AuthProvider = ({children}) => {
         if(token && !isSignedIn){
             (async () => {
                 try{
+                    const res = await ticketApi.post(verify, {token})
+                    res.status === 200 && setIsSignedIn(true) && setLoading(false) 
+                }
+                catch(err){
+                    setIsSignedIn(false) && setLoading(false)
+                }
+            })()
+        }
+        else if(!token){
+            localStorage.setItem('accessToken', '')
+            setLoading(false)
+        }
+
+        if(isSignedIn){
+            (async () => {
+                setLoading(true)
+                try{
                     const response = await TicketApi.get(userData, {
                         headers: { 'Authorization': 'Bearer ' + token}
                     })
                     const {email, name} = response.data
                     setUser({email, name})
-                    setIsSignedIn(true)
                 }
                 catch(err){
                     console.log(err)
                 }
             })()
+            setLoading(false)
         }
-        setLoading(false)
+
     }, [isSignedIn]);
 
     const value = {user, loading, signUp, logIn, signOut, isSignedIn}

@@ -3,7 +3,8 @@ import {useAuth} from '../../hooks'
 import Layout from '../common/Layout'
 
 export const PrivateRoute = ({component: Component, path, ...props}) => {
-    const {isSignedIn} = useAuth()
+    const {isSignedIn, loading} = useAuth()
+    console.log(isSignedIn, loading, 'test')
     return (
         <Route 
         path={path} 
