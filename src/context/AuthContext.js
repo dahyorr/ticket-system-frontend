@@ -29,21 +29,15 @@ export const AuthProvider = ({children}) => {
             if(!isSignedIn){
                 const valid = await verifyToken()
                 if (valid){
-                    setIsSignedIn(true) && setLoading(false)
+                    setUser(await fetchUserData())
+                    setIsSignedIn(true)
                 }
-                else{
-                    setIsSignedIn(false) && setLoading(false)
-                }
-            }
-            else{
-                setLoading(true)
-                setUser(await fetchUserData())
                 setLoading(false)
             }
         })()
     }, [isSignedIn]);
 
-    const value = {user, loading, signUp: signUpUser, logIn, signOut, isSignedIn}
+    const value = {user, signUp: signUpUser, logIn, signOut, isSignedIn}
 
     return(
         <Context.Provider value={value}>

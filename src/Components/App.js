@@ -8,6 +8,7 @@ import Register from './auth/Register';
 import Dashboard from './views/Dashboard';
 import Tickets from './views/Tickets';
 import TicketView from './views/TicketView';
+import NewTicket from './views/NewTicket';
 import NotFound from "./error/NotFound";
 import Layout from './common/Layout'
 import { AuthProvider } from "../context/AuthContext";
@@ -25,7 +26,7 @@ const App = () =>{
                         <PublicRoute path={'/register'}  component={Register}/>
                         <PrivateRoute path={'/'} exact component={Dashboard}/>
                         <PrivateRoute path={'/tickets'} exact component={Tickets}/>
-                        <PrivateRoute path={'/tickets/create'}  component={Dashboard}/> {/* change */}
+                        <PrivateRoute path={'/tickets/create'}  component={NewTicket}/> {/* change */}
                         <PrivateRoute path={'/tickets/:id'} component={TicketView}/> {/* change */}
 
                         <Route render={(props) => (

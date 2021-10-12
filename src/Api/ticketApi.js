@@ -10,12 +10,13 @@ export const routes = {
     refresh: 'auth/refresh/',
     userData: 'auth/user/',
     verify: 'auth/verify/',
+    allTickets: 'tickets/',
 }
 
 const getFromStore = (key) => localStorage.getItem(key)
 const setInStore = (key, value) => localStorage.setItem(key, value)
 
-export const refreshToken = async () => {
+export const refreshToken = async () => {   // TODO: Fix date check
     const expiryTime = parseInt(getFromStore('tokenExpires'))
     if(expiryTime && Date.now() >= expiryTime){
         try{
@@ -29,6 +30,7 @@ export const refreshToken = async () => {
         catch(err){
             console.log(err)
             setInStore('accessToken', '')
+            setInStore('refreshToken', '')
         }
     }
 }
@@ -42,6 +44,7 @@ export const verifyToken = async () => {
         }
         catch(err){
             console.log(err)
+            setInStore('accessToken', '')
             return false
         }
     }
@@ -95,6 +98,24 @@ export const logInUser = async (email, password, callback) => {
         const message = err.response.data.detail || 'An Error has occurred'
         return {status: 'error', message}
     }
+}
+
+export const fetchAllTickets = async () => {
+    await refreshToken()
+    const token = getFromStore('accessToken')
+    if(token){
+        try{
+            const {data} = await TicketApi.get(routes.allTickets, {
+                headers: { 'Authorization': 'Bearer ' + token}
+            })
+            return {status: 'success', data}
+        }       
+        catch(err){
+            console.log(err)
+            return {status: 'error', error: err}
+        }
+    }
+    return 
 }
 
 export default TicketApi 
