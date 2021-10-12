@@ -11,11 +11,13 @@ import TicketView from './views/TicketView';
 import NotFound from "./error/NotFound";
 import Layout from './common/Layout'
 import { AuthProvider } from "../context/AuthContext";
+import { TicketProvider } from "../context/TicketContext";
 
 const App = () =>{
     return (
         <div className="App">
             <AuthProvider>
+            <TicketProvider>
                 <ToastContainer/>
                 <BrowserRouter>
                     <Switch>
@@ -33,6 +35,7 @@ const App = () =>{
                         )}/>
                     </Switch>
                 </BrowserRouter>
+            </TicketProvider>
             </AuthProvider>
         </div>
     );

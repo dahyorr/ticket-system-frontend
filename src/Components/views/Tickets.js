@@ -1,25 +1,10 @@
+import { useContext, useEffect } from 'react'
 // import { Link } from 'react-router-dom'
 import MUIDataTable from "mui-datatables";
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import { Context as TicketContext } from '../../context/TicketContext';
 
 const tableColumns = ["Name", "Status", 'Last Activity', "Created By", "Date Created"];
-const tableData = [
-        {name: 's'},
-        {name: 's'},
-        {name: 's'},
-        {name: 's'},
-        {name: 's'},
-        {name: 's'},
-        {name: 's'},
-        {name: 's'},
-        {name: 's'},
-        {name: 's'},
-        {name: 's'},
-        {name: 's'},
-        {name: 's'},
-        {name: 's'},
-        {name: 's'},
-]
 const tableOptions = {
     filterType: 'checkbox',
     tableBodyMaxHeight: '100%',
@@ -42,9 +27,14 @@ const getMuiTheme = () => createMuiTheme({
     }
 })
 
-function Tickets({ tickets, history}) {
+function Tickets({history}) {
 
-    console.log(tickets)
+    const {tickets, loading, fetchTickets} = useContext(TicketContext)
+    useEffect(() => {
+
+    }, [])
+
+    console.log(tickets, loading)
 
     return (
         <div className="Tickets">
@@ -52,7 +42,7 @@ function Tickets({ tickets, history}) {
             <MuiThemeProvider theme={getMuiTheme()}>
                 <MUIDataTable
                     title={"All Tickets"}
-                    data={tableData}
+                    data={tickets}
                     columns={tableColumns}
                     options={tableOptions}
                 />
