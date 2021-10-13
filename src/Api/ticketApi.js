@@ -9,23 +9,71 @@ export const routes = {
     register: 'auth/register/',
     refresh: 'auth/refresh/',
     userData: 'auth/user/',
+    userList: 'auth/users/',
     verify: 'auth/verify/',
-    allTickets: 'tickets/',
+    tickets: 'tickets/',
+    queues: 'queues/',
     userTickets: 'user/tickets/',
 }
 
 const getFromStore = (key) => localStorage.getItem(key)
 const setInStore = (key, value) => localStorage.setItem(key, value)
 
-export const refreshToken = async () => {   // TODO: Fix date check
+const getData = async (route, options) => await TicketApi.get(route, options)
+const postData = async (route, data, options) => await TicketApi.post(route, data, options={})
+
+
+const defaultFetchData = async (route) => {
+    await refreshToken()
+    const token = getFromStore('accessToken')
+    if(token){
+        try{
+            const {data} = await getData(route, {
+                headers: {
+                    'Authorization': 'Bearer ' + token,
+                    // 'Content-Type': 'Application/JSON'
+                }
+            })
+            return {status: 'success', data}
+        }       
+        catch(err){
+            console.log(err)
+            return {status: 'error', error: err}
+        }
+    }
+    return 
+}
+
+// const defaultSendData = async (route, data) => {
+//     await refreshToken()
+//     const token = getFromStore('accessToken')
+//     if(token){
+//         try{
+//             const res = await getData(route, data, {
+//                 headers: {
+//                     'Authorization': 'Bearer ' + token,
+//                     // 'Content-Type': 'Application/JSON'
+//                 }
+//             })
+//             return {status: 'success', data: res} // TODO: return required Data
+//         }       
+//         catch(err){
+//             console.log(err)
+//             return {status: 'error', error: err} 
+//         }
+//     }
+//     return 
+// }
+
+export const refreshToken = async () => {  
     const expiryTime = parseInt(getFromStore('tokenExpires'))
     if(expiryTime && Date.now() >= expiryTime){
         try{
             const refreshToken = getFromStore('refreshToken')
             if(refreshToken){
-                const response = await TicketApi.post(routes.refresh, {refresh: refreshToken})
+                const response = await postData(routes.refresh, {refresh: refreshToken})
                 setInStore('accessToken', response.data.access)
-                setInStore('tokenExpires', Date.now() + (5*60))
+                setInStore('tokenExpires', Date.now() + (5*60000))
             }
         }
         catch(err){
@@ -37,10 +85,11 @@ export const refreshToken = async () => {   // TODO: Fix date check
 }
 
 export const verifyToken = async () => {
+    await refreshToken()
     let token = getFromStore('accessToken')
     if(token){
         try{
-            await TicketApi.post(routes.verify, {token})
+            await postData(routes.verify, {token})
             return true
         }
         catch(err){
@@ -52,26 +101,9 @@ export const verifyToken = async () => {
     return false
 }
 
-export const fetchUserData = async () => {
-    let token = getFromStore('accessToken')
-    if(token){
-        try{
-            const response = await TicketApi.get(routes.userData, {
-                headers: { 'Authorization': 'Bearer ' + token}
-            })
-            return response.data
-        }
-        catch(err){
-            console.log(err)
-            return null
-        }
-    }
-    return null
-}
-
 export const signUpUser = async (name, email, password) => {
     try{
-        const response  = await TicketApi.post(routes.register, {name, email, password})
+        const response  = await postData(routes.register, {name, email, password})
         return {status: 'success', message: response.data.message}
     }
     catch(err){
@@ -86,11 +118,11 @@ export const signUpUser = async (name, email, password) => {
 
 export const logInUser = async (email, password, callback) => {
     try{
-        const response = await TicketApi.post(routes.login, { email, password})
-        const {access, refresh} = response.data
+        const {data} = await postData(routes.login, { email, password})
+        const {access, refresh} = data
         setInStore('accessToken', access)
         setInStore('refreshToken', refresh)
-        setInStore('tokenExpires', Date.now() + (5 * 60))
+        setInStore('tokenExpires', Date.now() + (5 * 60000))
         callback()
         return {status: 'success'}
     }
@@ -101,58 +133,12 @@ export const logInUser = async (email, password, callback) => {
     }
 }
 
-export const fetchAllTickets = async () => {
-    await refreshToken()
-    const token = getFromStore('accessToken')
-    if(token){
-        try{
-            const {data} = await TicketApi.get(routes.allTickets, {
-                headers: { 'Authorization': 'Bearer ' + token}
-            })
-            return {status: 'success', data}
-        }       
-        catch(err){
-            console.log(err)
-            return {status: 'error', error: err}
-        }
-    }
-    return 
-}
+export const fetchUserData = async () => await defaultFetchData(routes.userData)
+export const fetchAllTickets = async () => await defaultFetchData(routes.tickets)
+export const fetchTicketsForUser = async () => await defaultFetchData(routes.userTickets)
+export const fetchSingleTicket = async (id) => await defaultFetchData(`${routes.tickets}${id}/`)
+export const fetchUserList = async () => await defaultFetchData(routes.userList)
+export const fetchQueues = async () => await defaultFetchData(routes.queues)
 
-export const fetchUserTickets = async () => {
-    await refreshToken()
-    const token = getFromStore('accessToken')
-    if(token){
-        try{
-            const {data} = await TicketApi.get(routes.userTickets, {
-                headers: { 'Authorization': 'Bearer ' + token}
-            })
-            return {status: 'success', data}
-        }       
-        catch(err){
-            console.log(err)
-            return {status: 'error', error: err}
-        }
-    }
-    return 
-}
-
-export const fetchTickets = async (id) => {
-    await refreshToken()
-    const token = getFromStore('accessToken')
-    if(token){
-        try{
-            const {data} = await TicketApi.get(routes.allTickets + id + '/', {
-                headers: { 'Authorization': 'Bearer ' + token}
-            })
-            return {status: 'success', data}
-        }       
-        catch(err){
-            console.log(err)
-            return {status: 'error', error: err}
-        }
-    }
-    return 
-}
 
 export default TicketApi 

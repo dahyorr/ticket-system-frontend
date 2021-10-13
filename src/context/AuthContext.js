@@ -25,11 +25,11 @@ export const AuthProvider = ({children}) => {
 
     useEffect(() => {
         (async () => {
-            await refreshToken()
             if(!isSignedIn){
                 const valid = await verifyToken()
                 if (valid){
-                    setUser(await fetchUserData())
+                    const res = await fetchUserData()
+                    res.status === 'success' && setUser(res.data)
                     setIsSignedIn(true)
                 }
                 setLoading(false)

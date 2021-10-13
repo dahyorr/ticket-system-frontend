@@ -1,5 +1,5 @@
 import MUIDataTable from "mui-datatables";
-import { createMuiTheme, MuiThemeProvider, makeStyles } from '@material-ui/core/styles';
+import { createMuiTheme, MuiThemeProvider, makeStyles} from '@material-ui/core/styles';
 import { IconButton } from "@material-ui/core";
 import RefreshIcon from '@material-ui/icons/Refresh';
 import AddIcon from '@material-ui/icons/Add';

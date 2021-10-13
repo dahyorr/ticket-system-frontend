@@ -5,18 +5,18 @@ import TicketsTable from '../common/TicketsTable';
 
 function Tickets({history}) {
 
-    const {tickets, loading, fetchTickets} = useContext(TicketContext)
+    const {userTickets,  loading, fetchUserTickets} = useContext(TicketContext)
 
     useEffect(() =>{
-        fetchTickets()
-    }, [fetchTickets])
+        fetchUserTickets()
+    }, [fetchUserTickets])
 
     return (
         <div className="Tickets">
             <div className="container">
                 {loading
                 ?<Loader/>
-                :<TicketsTable data={tickets} onRefresh={fetchTickets} onAdd={() => history.push('/tickets/create')} title={"My Created Tickets"}/>
+                :<TicketsTable data={userTickets} onRefresh={fetchUserTickets} onAdd={() => history.push('/tickets/create')} title={"My Created Tickets"}/>
                 }
             </div>
         </div>
