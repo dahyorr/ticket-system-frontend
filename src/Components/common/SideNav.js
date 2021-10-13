@@ -13,7 +13,10 @@ function SideNav({location: {pathname}}) {
                         <FaList className='icon'/>  <p>Tickets</p>
                     </Link>
 
-                    <Link to='/requests' className={`nav-item ${pathname.split('/')[1]=== 'requests' ?'active':''}`}>
+                    <Link to='/user/tickets' className={`nav-item ${
+                        pathname.split('/').includes('user') && pathname.split('/').includes('tickets')
+                        ?'active'
+                        :''}`}>
                         <FaProjectDiagram className='icon'/> <p>Created Tickets</p>
                     </Link>
 

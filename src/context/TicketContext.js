@@ -19,7 +19,7 @@ export const TicketProvider = ({children}) => {
                 return {...state, loading: true}
             case actionTypes.fetchTickets:
                 const newArr = [...state.tickets, ...action.payload]
-                return {...state, tickets: _.uniqBy(newArr, 'id')}
+                return {...state, tickets: _.reverse(_.uniqBy(_.reverse([...newArr]), 'id'))}
             case actionTypes.endFetchTickets:
                 return {...state, loading: false}
             default: 

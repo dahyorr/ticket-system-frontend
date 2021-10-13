@@ -1,15 +1,12 @@
-function TicketView({match: {params: {id}}, tickets}) {
-    if(tickets.length > 0){  
-        const data = tickets.filter(ticket => parseInt(id, 10) === ticket.id)[0]
-        return (
-            <div className="TicketView">
-                <div className="container">
-                    {data.title}
-                </div>
+function TicketView({match: {params: {id}}}) {
+
+    return (
+        <div className="TicketView">
+            <div className="container">
+
             </div>
-        )
-    }
-    else return null
+        </div>
+    )
 }
 
 export default TicketView

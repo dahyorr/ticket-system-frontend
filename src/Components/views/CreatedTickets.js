@@ -9,14 +9,14 @@ function Tickets({history}) {
 
     useEffect(() =>{
         fetchTickets()
-    }, [fetchTickets])    
+    }, [fetchTickets])
 
     return (
         <div className="Tickets">
             <div className="container">
                 {loading
                 ?<Loader/>
-                :<TicketsTable data={tickets} onRefresh={fetchTickets} onAdd={() => history.push('/tickets/create')} title={"All Tickets"}/>
+                :<TicketsTable data={tickets} onRefresh={fetchTickets} onAdd={() => history.push('/tickets/create')} title={"My Created Tickets"}/>
                 }
             </div>
         </div>

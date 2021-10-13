@@ -11,6 +11,7 @@ export const routes = {
     userData: 'auth/user/',
     verify: 'auth/verify/',
     allTickets: 'tickets/',
+    userTickets: 'user/tickets/',
 }
 
 const getFromStore = (key) => localStorage.getItem(key)
@@ -106,6 +107,42 @@ export const fetchAllTickets = async () => {
     if(token){
         try{
             const {data} = await TicketApi.get(routes.allTickets, {
+                headers: { 'Authorization': 'Bearer ' + token}
+            })
+            return {status: 'success', data}
+        }       
+        catch(err){
+            console.log(err)
+            return {status: 'error', error: err}
+        }
+    }
+    return 
+}
+
+export const fetchUserTickets = async () => {
+    await refreshToken()
+    const token = getFromStore('accessToken')
+    if(token){
+        try{
+            const {data} = await TicketApi.get(routes.userTickets, {
+                headers: { 'Authorization': 'Bearer ' + token}
+            })
+            return {status: 'success', data}
+        }       
+        catch(err){
+            console.log(err)
+            return {status: 'error', error: err}
+        }
+    }
+    return 
+}
+
+export const fetchTickets = async (id) => {
+    await refreshToken()
+    const token = getFromStore('accessToken')
+    if(token){
+        try{
+            const {data} = await TicketApi.get(routes.allTickets + id + '/', {
                 headers: { 'Authorization': 'Bearer ' + token}
             })
             return {status: 'success', data}

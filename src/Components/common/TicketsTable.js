@@ -3,6 +3,8 @@ import { createMuiTheme, MuiThemeProvider, makeStyles } from '@material-ui/core/
 import { IconButton } from "@material-ui/core";
 import RefreshIcon from '@material-ui/icons/Refresh';
 import AddIcon from '@material-ui/icons/Add';
+import DetailLink from '../common/DetailLink'
+import { generateStatusColor } from "../../utils";
 
 const useStyles = makeStyles({
     icon: {
@@ -22,8 +24,12 @@ const getMuiTheme = () => createMuiTheme({
     }
 })
 
-// const tableColumns = ["Title", "Status", 'Last Activity', "Created By", "Date Created"];
 const tableColumns = [
+    {label: 'Ticket ID', name: 'id', options: {
+        filter: false, 
+        sort: true,
+        customBodyRender: id => `#${id}` 
+    } },
     {
         name: "title",
         label: "Title",
@@ -38,6 +44,13 @@ const tableColumns = [
         options: {
             filter: true,
             sort: true,
+            customBodyRender: (value) => (
+            <span 
+                style={{color: generateStatusColor(value) }}
+            >
+                {value}
+            </span>
+            )
         }
     },
     {
@@ -46,6 +59,13 @@ const tableColumns = [
         options: {
             filter: true,
             sort: true,
+            customBodyRender: (value) => (
+                <span 
+                    style={{color: generateStatusColor(value) }}
+                >
+                    {value}
+                </span>
+                )
         }
     },
     {
@@ -56,13 +76,28 @@ const tableColumns = [
             sort: true,
         }
     },
+    {
+        name: "created_date",
+        label: "Date Created",
+        options: {
+            filter: false,
+            sort: true,
+            customBodyRender: (value) => new Date(value).toDateString()
+        }
+    },
+    {label: ' ',name: 'id', options: {
+        filter: false, 
+        sort: false,
+        customBodyRender: id => <DetailLink path={`/tickets/${id}`}/>, 
+    } },
 ];
 
-const TicketsTable = ({data, onRefresh, onAdd}) => {
+const TicketsTable = ({data, onRefresh, onAdd, title}) => {
     const classes = useStyles();
 
     const tableOptions = {
         filterType: 'checkbox',
+        selectableRows: 'none',
         tableBodyMaxHeight: '100%',
         textLabels: {
             body: {
@@ -96,7 +131,7 @@ const TicketsTable = ({data, onRefresh, onAdd}) => {
     return (
         <MuiThemeProvider theme={getMuiTheme()}>
             <MUIDataTable
-                title={"All Tickets"}
+                title={title}
                 data={data}
                 columns={tableColumns}
                 options={tableOptions}
