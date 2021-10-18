@@ -1,0 +1,18 @@
+.MessageDisplay{
+    margin-bottom: 0.5rem;
+    // border-bottom: grey 1px solid;
+    .pointer{
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: $peach-color;
+        align-self: center  ;
+        &-author{
+            background-color: $space-color;
+        }
+    }
+    .author{
+        margin-left: 5px;
+    }   
+    // .message{}
+}

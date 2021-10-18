@@ -10,6 +10,25 @@
         box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.20),
             0px 4px 5px 0px rgba(0, 0, 0, 0.14),
             0px 1px 10px 0px rgba(0, 0, 0, 0.12);
-            border-radius: 5    px;
+        border-radius: 5 px;
+        padding: 0.85rem 1rem;
+        overflow: auto;
+        .title{
+            margin-bottom: 0.5rem;
+        }
+        .meta{
+            font-size: 0.9rem;
+            color: darkgray;
+            margin-bottom: 1rem;
+            p{margin: 0.2rem 0;};
+            .edit-form{
+                color: black;
+                margin-bottom: 0.4rem;
+
+                select{
+                    margin-left: 0.5rem ;
+                }
+            }
+        }
     }
 }

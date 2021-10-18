@@ -71,6 +71,7 @@ p{
   display: inline-block;
   padding: 0.5rem 1.5rem;
   border-radius: 5px;
+  // border: none;
   &:hover{
     cursor: pointer;
   }
@@ -79,6 +80,13 @@ p{
     color: white;
     &:hover{
       background: #b36d74;
+    }
+  }
+  &-dark{
+    background: #314e5d;
+    color: white;
+    &:hover{
+      background: lighten(#314e5d, 5);
     }
   }
 }

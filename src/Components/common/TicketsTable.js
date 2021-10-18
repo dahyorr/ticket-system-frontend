@@ -70,6 +70,14 @@ const tableColumns = [
         }
     },
     {
+        name: "queue",
+        label: "Queue",
+        options: {
+            filter: false,
+            sort: true,
+        }
+    },
+    {
         name: "owner",
         label: "Created By",
         options: {
