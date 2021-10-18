@@ -3,6 +3,7 @@ import { createMuiTheme, MuiThemeProvider, makeStyles} from '@material-ui/core/s
 import { IconButton } from "@material-ui/core";
 import RefreshIcon from '@material-ui/icons/Refresh';
 import AddIcon from '@material-ui/icons/Add';
+import Tooltip from "@material-ui/core/Tooltip";
 import DetailLink from '../common/DetailLink'
 import { generateStatusColor } from "../../utils";
 
@@ -109,21 +110,23 @@ const TicketsTable = ({data, onRefresh, onAdd, title}) => {
         rowsPerPageOptions: [10, 15, 20],
         customToolbar: () => (
         <>
-            <IconButton 
-                aria-label='Refresh tickets'
-                onClick={onRefresh}
-                className={classes.icon}
-            >
-                <RefreshIcon/>
-            </IconButton>
-    
-            <IconButton
-                aria-label='Add new ticket'
-                onClick={onAdd}
-                className={classes.icon}
-            >
-                <AddIcon/>
-            </IconButton>
+            <Tooltip title='Refresh Tickets'>
+                <IconButton 
+                    onClick={onRefresh}
+                    className={classes.icon}
+                >
+                    <RefreshIcon/>
+                </IconButton>
+            </Tooltip>
+
+            <Tooltip title='Add New Ticket'>
+                <IconButton
+                    onClick={onAdd}
+                    className={classes.icon}
+                >
+                    <AddIcon/>
+                </IconButton>
+            </Tooltip>
         </>
         )
     };

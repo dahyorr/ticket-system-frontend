@@ -14,6 +14,7 @@ export const routes = {
     tickets: 'tickets/',
     queues: 'queues/',
     userTickets: 'user/tickets/',
+    openTickets: 'tickets/open/',
 }
 
 const getFromStore = (key) => localStorage.getItem(key)
@@ -136,6 +137,7 @@ export const logInUser = async (email, password, callback) => {
 export const fetchUserData = async () => await defaultFetchData(routes.userData)
 export const fetchAllTickets = async () => await defaultFetchData(routes.tickets)
 export const fetchTicketsForUser = async () => await defaultFetchData(routes.userTickets)
+export const fetchOpenTickets = async () => await defaultFetchData(routes.openTickets)
 export const fetchSingleTicket = async (id) => await defaultFetchData(`${routes.tickets}${id}/`)
 export const fetchUserList = async () => await defaultFetchData(routes.userList)
 export const fetchQueues = async () => await defaultFetchData(routes.queues)

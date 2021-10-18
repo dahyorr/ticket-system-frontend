@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Loader from '../Components/common/Loader';
-import {refreshToken, verifyToken, fetchUserData, signUpUser, logInUser} from '../api/ticketApi';
+import {verifyToken, fetchUserData, signUpUser, logInUser} from '../api/ticketApi';
 
 
 export const Context = React.createContext({})

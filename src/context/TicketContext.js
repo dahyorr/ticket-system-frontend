@@ -1,5 +1,5 @@
 import React, {useReducer, useMemo} from 'react'
-import {fetchAllTickets, fetchTicketsForUser} from "../api/ticketApi";
+import {fetchAllTickets, fetchTicketsForUser, fetchOpenTickets} from "../api/ticketApi";
 import { actions, actionTypes } from '../actions';
 import {toast} from 'react-toastify'
 import _ from 'lodash'
@@ -11,7 +11,8 @@ export const TicketProvider = ({children}) => {
     const initialState ={
         loading: false,
         tickets: [],
-        userTickets: []
+        userTickets: [],
+        openTickets: [],
     }
 
     const reducer = (state, action) => {
@@ -22,6 +23,8 @@ export const TicketProvider = ({children}) => {
                 return {...state, tickets:_.uniqBy([...action.payload, ...state.tickets], 'id')}
             case actionTypes.fetchUserTickets:
                 return {...state, userTickets: _.uniqBy([ ...action.payload, ...state.userTickets,], 'id')}
+            case actionTypes.fetchOpenTickets:
+                return {...state, openTickets: _.uniqBy([ ...action.payload, ...state.openTickets,], 'id')}
             case actionTypes.endFetchTickets:
                 return {...state, loading: false}
             default: 
@@ -59,7 +62,21 @@ export const TicketProvider = ({children}) => {
         dispatch(actions.endFetchTickets())
     }, [])
 
-    const value = {...data, fetchTickets, fetchUserTickets}
+    const fetchAllOpenTickets = useMemo(() => async () => {
+        dispatch(actions.startFetchTickets())
+        const res = await fetchOpenTickets()
+        if (res.status === 'success'){
+            dispatch(actions.fetchOpenTickets(res.data))
+        }
+        else{
+            if(res.error){
+                toast.error('An Error has occurred')
+            }
+        }
+        dispatch(actions.endFetchTickets())
+    }, [])
+
+    const value = {...data, fetchTickets, fetchUserTickets, fetchAllOpenTickets}
 
     return(
         <Context.Provider value={value}>

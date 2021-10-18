@@ -14,6 +14,7 @@ import NotFound from "./error/NotFound";
 import Layout from './common/Layout'
 import { AuthProvider } from "../context/AuthContext";
 import { TicketProvider } from "../context/TicketContext";
+import OpenTickets from './views/OpenTickets';
 
 const App = () =>{
     return (
@@ -28,6 +29,7 @@ const App = () =>{
                         <PrivateRoute path={'/'} exact component={Dashboard}/>
                         <PrivateRoute path={'/tickets'} exact component={Tickets}/>
                         <PrivateRoute path={'/tickets/create'}  component={NewTicket}/>
+                        <PrivateRoute path={'/open-tickets'}  component={OpenTickets}/>
                         <PrivateRoute path={'/tickets/:id'} component={TicketView}/> 
                         <PrivateRoute path={'/user/tickets'} component={CreatedTickets}/> 
 

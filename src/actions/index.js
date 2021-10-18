@@ -3,6 +3,7 @@ export const actionTypes = {
     endFetchTickets: 'END_FETCH_TICKETS',
     fetchTickets: 'FETCH_TICKETS',
     fetchUserTickets: 'FETCH_USER_TICKETS',
+    fetchOpenTickets: 'FETCH_OPEN_TICKETS',
 }
 
 export const actions = {
@@ -19,6 +20,10 @@ export const actions = {
     }),
     fetchUserTickets: (tickets) => ({
         type: actionTypes.fetchUserTickets,
+        payload: tickets
+    }),
+    fetchOpenTickets: (tickets) => ({
+        type: actionTypes.fetchOpenTickets,
         payload: tickets
     }),
 }
