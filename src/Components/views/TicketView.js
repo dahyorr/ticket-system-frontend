@@ -18,20 +18,18 @@ function TicketView({match: {params}}) {
         (async () => {
             const res = await fetchSingleTicket(id)
             const resQueue = await fetchQueues()
-            if (res.status === 'success'){
-                res.data.created_date = new Date(res.data.created_date)
-                setData(res.data)
-            }
             if (resQueue.status === 'success'){
                 setQueues(resQueue.data)
+            }
+            if (res.status === 'success'){
+                res.data.created_date = new Date(res.data.created_date)
+                res.data.queue = resQueue.data.find(queue => res.data.queue === queue.id)
+                setData(res.data)
             }
             else toast.error(res.error)
             setLoading(false)
         })()
     }, [id, edit])
-
-    // console.log(data)
-    // console.log(queues)
 
     const onChange = (e) =>{
         setSelectValues(prev =>{
@@ -43,7 +41,7 @@ function TicketView({match: {params}}) {
 
     const handleSetReply = () => {
         setSelectValues({
-            queue: data.queue,
+            queue: data.queue.id,
             priority: data.priority,
             status: data.status,
         })
@@ -65,7 +63,7 @@ function TicketView({match: {params}}) {
                     <select name="queue" id="queue" value={selectValues['queue']} onChange={onChange}>
                         <option value=''></option>
                         {queues.map(queue => 
-                        (<option value={queue.title} key={queue.id}>{queue.title}</option>)
+                        (<option value={queue.id} key={queue.id}>{queue.title}</option>)
                         )}
                     </select>
                 </div>
@@ -90,7 +88,7 @@ function TicketView({match: {params}}) {
             <div className="meta">
                 <p className={'created-by'}>{data.owner}</p>
                 <p className={'date-created'}>{`${data.created_date.toLocaleString()}`}</p>
-                <p className={'queue'}>{data.queue}</p>
+                <p className={'queue'}>{data.queue.title}</p>
                 <p className={'status'}>{data.status}</p>
                 <p className={'priority'}>{data.priority}</p>
             </div>
@@ -110,8 +108,14 @@ function TicketView({match: {params}}) {
                         <h2 className={'title'}>{data.title}</h2>
                         {displayMeta()}
                         <div className="message-list">
-                            <MessageDisplay author={data.owner} message={data.opening_text}/>
-                            <MessageDisplay reply/>
+                            <MessageDisplay author={data.owner} message={data.opening_text} date={data.created_date}/>
+                            {data.replies && data.replies.map(reply => <MessageDisplay 
+                            author={reply.author} 
+                            message={reply.message} 
+                            key={reply.date}
+                            date={reply.date}
+                            reply/>)}
+                            
                         </div>
                         
 

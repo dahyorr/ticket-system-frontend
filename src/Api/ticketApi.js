@@ -13,8 +13,8 @@ export const routes = {
     verify: 'auth/verify/',
     tickets: 'tickets/',
     queues: 'queues/',
-    userTickets: 'user/tickets/',
-    openTickets: 'tickets/open/',
+    userTickets: `tickets?user=1`,
+    openTickets: 'tickets?status=1',
 }
 
 const getFromStore = (key) => localStorage.getItem(key)

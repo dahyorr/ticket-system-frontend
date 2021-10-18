@@ -1,5 +1,4 @@
-export const generateStatusColor = (status) => {
-	if(!status) return ''
+export const generateStatusColor = (status='') => {
 	switch (status.toLowerCase()) {
 		case "closed":
 			return "green";

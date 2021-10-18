@@ -1,5 +1,5 @@
 .MessageDisplay{
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
     // border-bottom: grey 1px solid;
     .pointer{
         width: 10px;
@@ -11,8 +11,18 @@
             background-color: $space-color;
         }
     }
+    .message-title{
+        align-self: center;
+        margin: 0;
+    }
     .author{
-        margin-left: 5px;
+        margin: 0 0 0 5px;
+        span{
+            font-weight: bold;
+        }
     }   
-    // .message{}
+    .message{
+        margin: 0 0 7px 15px;
+        max-width: 75%;
+    }
 }

@@ -582,7 +582,7 @@ p {
 }
 
 .MessageDisplay {
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .MessageDisplay .pointer {
@@ -597,8 +597,22 @@ p {
   background-color: #2D3047;
 }
 
+.MessageDisplay .message-title {
+  align-self: center;
+  margin: 0;
+}
+
 .MessageDisplay .author {
-  margin-left: 5px;
+  margin: 0 0 0 5px;
+}
+
+.MessageDisplay .author span {
+  font-weight: bold;
+}
+
+.MessageDisplay .message {
+  margin: 0 0 7px 15px;
+  max-width: 75%;
 }
 
 .MessageReply {
