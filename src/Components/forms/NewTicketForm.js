@@ -18,11 +18,11 @@ const LoginForm = ({onFormSubmit, formError}) => {
                         })}
                     >
                         <Form className='Form'>
-                            <p className="form-error">{formError}</p>
+                            {/* <p className="form-error">{formError}</p> */}
                             <div className="input-container">
-                                <p className={'form-error'}><ErrorMessage name='email'/></p>
-                                <label htmlFor="email">Email</label>
-                                <Field type="email" name='email' />
+                                <p className={'form-error'}><ErrorMessage name='title'/></p>
+                                <label htmlFor="title">Title</label>
+                                <Field type="text" name='title' />
                             </div>
 
                             <div className="input-container">

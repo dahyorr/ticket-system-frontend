@@ -1,5 +1,5 @@
 import React from 'react'
-import {BrowserRouter, Switch, Route} from "react-router-dom";
+import {Router, Switch, Route} from "react-router-dom";
 import {PrivateRoute, PublicRoute} from "./auth/RouteTypes";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,6 +15,8 @@ import Layout from './common/Layout'
 import { AuthProvider } from "../context/AuthContext";
 import { TicketProvider } from "../context/TicketContext";
 import OpenTickets from './views/OpenTickets';
+import UsersList from './views/UsersList';
+import {history} from '../utils'
 
 const App = () =>{
     return (
@@ -22,7 +24,7 @@ const App = () =>{
             <AuthProvider>
             <TicketProvider>
                 <ToastContainer/>
-                <BrowserRouter>
+                <Router history={history}>
                     <Switch>
                         <PublicRoute path={'/login'}  component={Login}/>
                         <PublicRoute path={'/register'}  component={Register}/>
@@ -32,6 +34,7 @@ const App = () =>{
                         <PrivateRoute path={'/open-tickets'}  component={OpenTickets}/>
                         <PrivateRoute path={'/tickets/:id'} component={TicketView}/> 
                         <PrivateRoute path={'/user/tickets'} component={CreatedTickets}/> 
+                        <PrivateRoute path={'/users'} component={UsersList}/> 
 
                         <Route render={(props) => (
                             <Layout>
@@ -39,7 +42,7 @@ const App = () =>{
                             </Layout>
                         )}/>
                     </Switch>
-                </BrowserRouter>
+                </Router>
             </TicketProvider>
             </AuthProvider>
         </div>

@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import Loader from '../Components/common/Loader';
 import {verifyToken, fetchUserData, signUpUser, logInUser} from '../api/ticketApi';
+import { history } from '../utils';
 
 
 export const Context = React.createContext({})
@@ -20,7 +21,7 @@ export const AuthProvider = ({children}) => {
         localStorage.removeItem('refreshToken')
         setIsSignedIn(false)
         setUser(null)
-        return {status: 'success'}
+        history.push('/login')
     }
 
     useEffect(() => {

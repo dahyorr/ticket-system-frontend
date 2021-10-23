@@ -32,9 +32,9 @@ function SideNav({location: {pathname}}) {
                         <MdPeople className='icon'/> <p>Users</p>
                     </Link>
                     
-                    <Link to='/queues' className={`nav-item ${pathname.split('/')[1] === 'queues' ?'active':''}`}>
+                    {/* <Link to='/queues' className={`nav-item ${pathname.split('/')[1] === 'queues' ?'active':''}`}>
                     <FaList className='icon'/> <p>Queues</p>
-                    </Link>
+                    </Link> */}
                 </nav>
         </div>
     )

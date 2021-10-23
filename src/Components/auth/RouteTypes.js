@@ -4,6 +4,7 @@ import Layout from '../common/Layout'
 
 export const PrivateRoute = ({component: Component, path, ...props}) => {
     const {isSignedIn} = useAuth()
+    console.log(path)
     return (
         <Route 
         path={path} 
@@ -11,7 +12,7 @@ export const PrivateRoute = ({component: Component, path, ...props}) => {
         render={props => {
             return isSignedIn  
             ? <Layout><Component {...props}/></Layout>
-            : <Redirect to="/login"/>
+            : <Redirect to={`/login?next=${path}`}/>
         }} 
         />
     )

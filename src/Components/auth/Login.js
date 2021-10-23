@@ -4,7 +4,11 @@ import { toast } from 'react-toastify'
 import LoginForm from "../forms/LoginForm";
 import {useAuth} from '../../hooks'
 
-const Login = ({history}) => {
+const Login = ({history,location}) => {
+    const queryString = location.search;
+    const sp = new URLSearchParams(queryString);
+    const next = sp.get('next')
+    console.log(next)
     const {logIn} = useAuth() 
 
     const onLogin = async ({email, password}) => {
@@ -14,7 +18,7 @@ const Login = ({history}) => {
             toast.error(res.message)
         }
         else{
-            history.push('/')
+            history.push(next || '/')
         }
     }
 
