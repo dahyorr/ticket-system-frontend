@@ -4,7 +4,6 @@ import Layout from '../common/Layout'
 
 export const PrivateRoute = ({component: Component, path, ...props}) => {
     const {isSignedIn} = useAuth()
-    console.log(path)
     return (
         <Route 
         path={path} 

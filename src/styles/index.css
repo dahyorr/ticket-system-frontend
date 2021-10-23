@@ -327,44 +327,35 @@ p {
   padding: 0.5rem 1rem;
 }
 
-.LoginForm .error .form-error {
+.Form .error .form-error {
   text-align: center;
   color: red;
 }
 
-.LoginForm .form-group {
+.Form .form-group {
   margin-bottom: 2rem;
 }
 
-.LoginForm input, .LoginForm button {
+.Form input, .Form button {
   width: 100%;
   height: 40px;
 }
 
-.LoginForm input {
+.Form textarea, .Form input {
   border: 1px solid #9a9a9a;
+  border-radius: 10px;
   padding: 0.2rem 0.5rem;
   outline: none;
   background: white;
   font-size: 0.9rem;
 }
 
-.LoginForm input:first-of-type {
-  border-radius: 10px 10px 0 0;
-  border-bottom: none;
-}
-
-.LoginForm input:last-of-type {
-  border-radius: 0 0 10px 10px;
-  border-top: none;
-}
-
-.LoginForm input:focus {
+.Form textarea:focus, .Form input:focus {
   border: 3px solid #f3be95;
   z-index: 5;
 }
 
-.LoginForm button {
+.Form button {
   background: #f3be95;
   border: none;
   border-radius: 10px;
@@ -375,25 +366,44 @@ p {
   position: relative;
 }
 
-.LoginForm button:hover {
+.Form button:hover {
   background: #f0b07e;
 }
 
-.LoginForm button .icon {
+.Form button .icon {
   position: absolute;
   color: #f7d2b5;
   left: 15px;
 }
 
-.LoginForm .no-account {
+.LoginForm.Form input {
+  border-radius: 0;
+}
+
+.LoginForm.Form input:first-of-type {
+  border-radius: 10px 10px 0 0;
+  border-bottom: none;
+}
+
+.LoginForm.Form input:last-of-type {
+  border-radius: 0 0 10px 10px;
+  border-top: none;
+}
+
+.LoginForm.Form input:focus {
+  border: 3px solid #f3be95;
+  z-index: 5;
+}
+
+.LoginForm.Form .no-account {
   text-align: center;
 }
 
-.LoginForm .no-account a {
+.LoginForm.Form .no-account a {
   color: #5B85AA;
 }
 
-.LoginForm .no-account a:hover {
+.LoginForm.Form .no-account a:hover {
   text-decoration: underline;
 }
 
