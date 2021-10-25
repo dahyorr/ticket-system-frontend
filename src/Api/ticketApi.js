@@ -10,31 +10,37 @@ export const routes = {
     refresh: 'auth/refresh/',
     userData: 'auth/user/',
     userList: 'auth/users/',
+    authorizedUserList: 'auth/users/?authorized=1',
     verify: 'auth/verify/',
     tickets: 'tickets/',
     queues: 'queues/',
-    userTickets: `tickets?user=1`,
-    openTickets: 'tickets?status=1',
+    userTickets: `tickets/?user=1`,
+    openTickets: 'tickets/?status=1',
+    replies: 'replies/',
 }
 
 const getFromStore = (key) => localStorage.getItem(key)
 const setInStore = (key, value) => localStorage.setItem(key, value)
 
 const getData = async (route, options) => await TicketApi.get(route, options)
-const postData = async (route, data, options) => await TicketApi.post(route, data, options={})
+const postData = async (route, data, options) => await TicketApi.post(route, data, options)
+// const putData = async (route, data, options) => await TicketApi.put(route, data, options)
+const patchData = async (route, data, options) => await TicketApi.patch(route, data, options)
 
-
-const defaultFetchData = async (route) => {
+const defaultRequest = async (route, requestType, requestData=null) =>{
     await refreshToken()
     const token = getFromStore('accessToken')
+    const defaultOptions = {
+        headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+        }
+    }
     if(token){
         try{
-            const {data} = await getData(route, {
-                headers: {
-                    'Authorization': 'Bearer ' + token,
-                    // 'Content-Type': 'Application/JSON'
-                }
-            })
+            const {data} = requestData
+                ? await requestType(route, requestData, defaultOptions)
+                : await requestType(route, defaultOptions) 
             return {status: 'success', data}
         }       
         catch(err){
@@ -45,26 +51,21 @@ const defaultFetchData = async (route) => {
     return 
 }
 
-// const defaultSendData = async (route, data) => {
-//     await refreshToken()
-//     const token = getFromStore('accessToken')
-//     if(token){
-//         try{
-//             const res = await getData(route, data, {
-//                 headers: {
-//                     'Authorization': 'Bearer ' + token,
-//                     // 'Content-Type': 'Application/JSON'
-//                 }
-//             })
-//             return {status: 'success', data: res} // TODO: return required Data
-//         }       
-//         catch(err){
-//             console.log(err)
-//             return {status: 'error', error: err} 
-//         }
-//     }
-//     return 
+const defaultFetchData = async (route) => {
+    return await defaultRequest(route, getData)
+}
+
+const defaultSendData = async (route, data) => {
+    return await defaultRequest(route, postData, data)
+}
+
+// const defaultUpdateData = async (route, data) => {
+//     return await defaultRequest(route, putData, data)
 // }
+
+const defaultPartialUpdateData = async (route, data) => {
+    return await defaultRequest(route, patchData, data)
+}
 
 export const refreshToken = async () => {  
     const expiryTime = parseInt(getFromStore('tokenExpires'))
@@ -140,7 +141,12 @@ export const fetchTicketsForUser = async () => await defaultFetchData(routes.use
 export const fetchOpenTickets = async () => await defaultFetchData(routes.openTickets)
 export const fetchSingleTicket = async (id) => await defaultFetchData(`${routes.tickets}${id}/`)
 export const fetchUserList = async () => await defaultFetchData(routes.userList)
+export const fetchAuthorizedUserList = async () => await defaultFetchData(routes.authorizedUserList)
 export const fetchQueues = async () => await defaultFetchData(routes.queues)
 
+export const createTicket = async (data) => await defaultSendData(routes.tickets, data)
+export const createReply = async (data) => await defaultSendData(routes.replies, data)
+
+export const updateTicketStatus = async (id, status) => await defaultPartialUpdateData(`${routes.tickets}${id}/`, {status})
 
 export default TicketApi 

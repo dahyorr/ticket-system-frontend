@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import { toast } from 'react-toastify'
-import { fetchSingleTicket, fetchQueues } from '../../api/ticketApi'
+import { fetchSingleTicket, fetchQueues, createReply, updateTicketStatus } from '../../api/ticketApi'
 import Loader from '../common/Loader'
 import MessageDisplay from '../common/MessageDisplay'
 import MessageReply from '../common/MessageReply'
@@ -34,7 +34,12 @@ function TicketView({match: {params}}) {
     const onChange = (e) =>{
         setSelectValues(prev =>{
             const data = {...prev}
-            data[e.target.name] = e.target.value
+            if(e.target.name === 'queue'){
+                data[e.target.name] =  parseInt(e.target.value)
+            }
+            else{
+                data[e.target.name] = e.target.value
+            }
             return data
         })
     }
@@ -48,10 +53,41 @@ function TicketView({match: {params}}) {
         setEdit(true)
     }
     
-    const handleReply = (value) => {
-        console.log(value)
-        console.log(selectValues)
-        setEdit(false)
+    const handleReply = async (value) => {
+        setLoading(true)
+        const res = await createReply({
+            ticket: data.id,
+            message: value,
+        })
+        setLoading(false)
+        if(res.status === 'success'){
+            toast.success('Reply Added Successfully')
+            setEdit(false)
+        }
+        else{
+            toast.error('An error occured')
+        }
+        // console.log(selectValues)
+    }
+
+    const changeTicketStatus = async () => {
+        setLoading(true)
+        const newStatus = data.status.toLowerCase() === 'open'
+        ? 2 
+        : 1
+        const res = await updateTicketStatus(data.id, newStatus)
+        if(res.status === 'success'){
+            toast.success('Ticket status Updated')  
+            setData(prev => ({
+                ...res.data, 
+                queue: prev.queue, 
+                created_date: prev.created_date
+            }))
+        }
+        else{
+            toast.error('An error occured')
+        }
+        setLoading(false)
     }
 
     const displayMeta = () => {
@@ -67,12 +103,7 @@ function TicketView({match: {params}}) {
                         )}
                     </select>
                 </div>
-                <div className="edit-form">Status:
-                    <select name="status" id="status" onChange={onChange}>
-                        <option value='Open'>Open</option>
-                        <option value='Closed'>Closed</option>
-                    </select>
-                </div>
+                <p className={'status'}>{data.status}</p>
                 <div className="edit-form">Priority: 
                     <select name="priority" id="priority" onChange={onChange}>
                         <option value='Critical'>Critical</option>
@@ -88,7 +119,7 @@ function TicketView({match: {params}}) {
             <div className="meta">
                 <p className={'created-by'}>{data.owner}</p>
                 <p className={'date-created'}>{`${data.created_date.toLocaleString()}`}</p>
-                <p className={'queue'}>{data.queue.title}</p>
+                {data.queue && <p className={'queue'}>{data.queue.title}</p>}
                 <p className={'status'}>{data.status}</p>
                 <p className={'priority'}>{data.priority}</p>
             </div>
@@ -120,11 +151,19 @@ function TicketView({match: {params}}) {
                         
 
                         <div>
-                            {!edit && <button className='btn btn-dark' onClick={handleSetReply}>Add Reply</button>}
+                            {!edit && <>
+                                <button className='btn btn-dark' onClick={handleSetReply}>Add Reply</button>
+                                <button className='btn btn-dark' onClick={changeTicketStatus}>
+                                    {data.status.toLowerCase() === 'open'
+                                    ?'Close Ticket'
+                                    :'Re-open Ticket'
+                                }
+                                </button>
+                            </>}
                         </div>
 
 
-                        {edit && <MessageReply handleReply={handleReply}/>}
+                        {edit && <MessageReply onCancel={() => setEdit(false)} handleReply={handleReply}/>}
                     </div>
                     )
                     }

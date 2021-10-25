@@ -3,30 +3,53 @@ import * as Yup from 'yup'
 import {FaPlus} from 'react-icons/fa'
 import Select from '../common/Select'
 
-const NewTicketForm = ({onFormSubmit, formError, queueList, userList}) => {
-    userList = userList.filter((user) => user.is_authorized)
-    .map((user) =>{
-        return {value: user.id.toString(), label: user.email}
-    })
+const NewTicketForm = ({onFormSubmit, queueList, userList}) => {
+    userList = userList.map((user) =>({value: user.id, label: user.email}))
+    queueList = queueList.map(queue => ({value: queue.id, label: queue.title}))
+    const priorityList = [
+        {value: 1, label: 'Critical'},
+        {value: 2, label: 'High'},
+        {value: 3, label: 'Normal'},
+        {value: 4, label: 'Low'},
+        {value: 5, label: 'Very Low'},
+    ]
 
     return(
         <Formik
             initialValues={{ 
                 title: '',
-                queue: '',
-                priority: 3,
+                queue: queueList.find(queue => queue.label.toLowerCase() === 'miscellaneous'),
+                priority: priorityList[2],
                 message: '',
                 assignedUsers: []
             }}
-            onSubmit={values => {
-                console.log(values)
+            onSubmit={({title, priority, queue, message, assignedUsers}) => {
+                const data = {
+                    title,
+                    priority: priority.value,
+                    queue: queue.value,
+                    opening_text: message,
+                    assigned_users: assignedUsers.map(user => user.value)
+                }
+                onFormSubmit(data)
             }}
             validationSchema={Yup.object({
                 title: Yup.string().max(255).required('You must provide a title'),
-                queue: Yup.number().required('You must pick a queue'),
-                priority: Yup.number().required('You must pick a Priority'),
+                queue:Yup.object().shape({
+                    label: Yup.string().required(),
+                    value: Yup.number().required()
+                }),
+                priority:Yup.object().shape({
+                    label: Yup.string().required(),
+                    value: Yup.number().required('You must pick a Priority')
+                }),
                 message:  Yup.string().max(255).required('You must provide a message'),
                 assignedUsers: Yup.array()
+                .min(1, "Pick at least 1 user")
+                    .of(Yup.object().shape({
+                        label: Yup.string().required(),
+                        value: Yup.number().required()
+                    }))
             })
             }
         >
@@ -37,26 +60,17 @@ const NewTicketForm = ({onFormSubmit, formError, queueList, userList}) => {
                     <label htmlFor="title">Title</label>
                     <Field type="text" name='title' />
                 </div>
-
+                
                 <div className="form-group">
                     <p className={'form-error'}><ErrorMessage name='queue'/></p>
                     <label htmlFor="queue">Queue</label>
-                    <Field as="select" name='queue'>
-                        <option value=""></option>
-                        {queueList.map(queue => <option key={queue.id} value={queue.id}>{queue.title}</option>)}
-                    </Field>
+                    <Field as={Select} name='queue' options={queueList} />
                 </div>
-                
+
                 <div className="form-group">
                     <p className={'form-error'}><ErrorMessage name='priority'/></p>
                     <label htmlFor="priority">Priority</label>
-                    <Field as="select" name='priority'>
-                        <option value="1">Critical</option>
-                        <option value="2">High</option>
-                        <option value="3">Normal</option>
-                        <option value="4">Low</option>
-                        <option value="5">Very Low</option>
-                    </Field>
+                    <Field as={Select} name='priority' options={priorityList} />
                 </div>
                 
                 <div className="form-group">

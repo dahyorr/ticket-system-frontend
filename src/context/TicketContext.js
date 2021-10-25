@@ -1,5 +1,5 @@
 import React, {useReducer, useMemo} from 'react'
-import {fetchAllTickets, fetchTicketsForUser, fetchOpenTickets} from "../api/ticketApi";
+import {fetchAllTickets, fetchTicketsForUser, fetchOpenTickets, fetchQueues} from "../api/ticketApi";
 import { actions, actionTypes } from '../actions';
 import {toast} from 'react-toastify'
 import _ from 'lodash'
@@ -27,6 +27,8 @@ export const TicketProvider = ({children}) => {
                 return {...state, openTickets: _.uniqBy([ ...action.payload, ...state.openTickets,], 'id')}
             case actionTypes.endFetchTickets:
                 return {...state, loading: false}
+            case actionTypes.resetTickets:
+                return initialState
             default: 
                 return state
         }
@@ -37,7 +39,14 @@ export const TicketProvider = ({children}) => {
     const fetchTickets = useMemo(() => async () => {
         dispatch(actions.startFetchTickets())
         const res = await fetchAllTickets()
-        if (res.status === 'success'){
+        const resQueue = await fetchQueues()
+        if (res.status === 'success' && resQueue.status === 'success'){
+            res.data.map(ticket => {
+                if(ticket.queue){
+                    ticket.queue = resQueue.data.find(queue => ticket.queue === queue.id).title
+                }
+                return ticket
+            })
             dispatch(actions.fetchTickets(res.data))
         }
         else{
@@ -51,7 +60,14 @@ export const TicketProvider = ({children}) => {
     const fetchUserTickets = useMemo(() => async () => {
         dispatch(actions.startFetchTickets())
         const res = await fetchTicketsForUser()
-        if (res.status === 'success'){
+        const resQueue = await fetchQueues()
+        if (res.status === 'success' && resQueue.status === 'success'){
+            res.data.map(ticket => {
+                if(ticket.queue){
+                    ticket.queue = resQueue.data.find(queue => ticket.queue === queue.id).title
+                }
+                return ticket
+            })
             dispatch(actions.fetchUserTickets(res.data))
         }
         else{
@@ -65,7 +81,14 @@ export const TicketProvider = ({children}) => {
     const fetchAllOpenTickets = useMemo(() => async () => {
         dispatch(actions.startFetchTickets())
         const res = await fetchOpenTickets()
-        if (res.status === 'success'){
+        const resQueue = await fetchQueues()
+        if (res.status === 'success' && resQueue.status === 'success'){
+            res.data.map(ticket => {
+                if(ticket.queue){
+                    ticket.queue = resQueue.data.find(queue => ticket.queue === queue.id).title
+                }
+                return ticket
+            })            
             dispatch(actions.fetchOpenTickets(res.data))
         }
         else{
@@ -76,7 +99,11 @@ export const TicketProvider = ({children}) => {
         dispatch(actions.endFetchTickets())
     }, [])
 
-    const value = {...data, fetchTickets, fetchUserTickets, fetchAllOpenTickets}
+    const resetTickets = useMemo(() => () => {
+        dispatch(actions.resetTickets())
+    }, [])
+
+    const value = {...data, fetchTickets, fetchUserTickets, fetchAllOpenTickets, resetTickets}
 
     return(
         <Context.Provider value={value}>

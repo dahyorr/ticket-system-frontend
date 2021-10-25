@@ -1,14 +1,13 @@
 import Select from 'react-select'
 
 const CustomSelect = ({onChange, onBlur, value, name, options, error, ...props}) => {
-    console.log(onChange)
-        const handleChange = (value, e) => {
-            onChange(name,value);
-        };
+    const handleChange = (option) => {
+        onChange({ currentTarget: { value: option, name }});
+    };
 
-        const handleBlur = () => {
-            onBlur(name, true);
-        };
+    const handleBlur = () => {
+        onBlur({ target: {name }});
+    };  
 
     return (
         <Select

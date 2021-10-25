@@ -4,6 +4,7 @@ export const actionTypes = {
     fetchTickets: 'FETCH_TICKETS',
     fetchUserTickets: 'FETCH_USER_TICKETS',
     fetchOpenTickets: 'FETCH_OPEN_TICKETS',
+    resetTickets: 'RESET_TICKETS'
 }
 
 export const actions = {
@@ -25,5 +26,8 @@ export const actions = {
     fetchOpenTickets: (tickets) => ({
         type: actionTypes.fetchOpenTickets,
         payload: tickets
+    }),
+    resetTickets: () => ({
+        type: actionTypes.resetTickets,
     }),
 }
