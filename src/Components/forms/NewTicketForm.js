@@ -53,36 +53,35 @@ const NewTicketForm = ({onFormSubmit, queueList, userList}) => {
             })
             }
         >
-            <Form className='Form'>
-                {/* <p className="form-error">{formError}</p> */}
+            <Form className='NewTicketForm Form'>
                 <div className="form-group">
-                    <p className={'form-error'}><ErrorMessage name='title'/></p>
                     <label htmlFor="title">Title</label>
                     <Field type="text" name='title' />
+                    <p className={'form-error'}><ErrorMessage name='title'/></p>
                 </div>
                 
                 <div className="form-group">
-                    <p className={'form-error'}><ErrorMessage name='queue'/></p>
                     <label htmlFor="queue">Queue</label>
                     <Field as={Select} name='queue' options={queueList} />
+                    <p className={'form-error'}><ErrorMessage name='queue'/></p>
                 </div>
 
                 <div className="form-group">
-                    <p className={'form-error'}><ErrorMessage name='priority'/></p>
                     <label htmlFor="priority">Priority</label>
                     <Field as={Select} name='priority' options={priorityList} />
+                    <p className={'form-error'}><ErrorMessage name='priority'/></p>
                 </div>
                 
                 <div className="form-group">
-                    <p className={'form-error'}><ErrorMessage name='message'/></p>
                     <label htmlFor="message">Message</label>
                     <Field as="textarea" name='message'/>
+                    <p className={'form-error'}><ErrorMessage name='message'/></p>
                 </div>
 
                 <div className="form-group">
-                    <p className={'form-error'}><ErrorMessage name='assignedUsers'/></p>
                     <label htmlFor="assignedUsers">Assigned Users</label>
                     <Field as={Select} name='assignedUsers' options={userList} isMulti/>
+                    <p className={'form-error'}><ErrorMessage name='assignedUsers'/></p>
                 </div>
 
                 <button type="submit"><FaPlus className='icon'/> Create Ticket</button>

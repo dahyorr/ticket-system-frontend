@@ -4,12 +4,14 @@ import { fetchQueues, fetchAuthorizedUserList } from "../../api/ticketApi"
 import { toast } from "react-toastify"
 import Loader from '../common/Loader';
 import { createTicket } from '../../api/ticketApi'
+import {useAuth} from '../../hooks'
 
 const NewTicket = ({history}) => {
     
     const [queueList, setQueueList] = useState([])
     const [userList, setUserList] = useState([])
     const [loading, setLoading] = useState(true)
+    const {user} = useAuth()
 
     useEffect(() => {
         (async () => {
@@ -38,10 +40,17 @@ const NewTicket = ({history}) => {
     }
     
     if (loading) return <Loader/>
-    else return(
-        <div>
-            <NewTicketForm queueList={queueList} userList={userList} onFormSubmit={onCreateTicket}/>
-        </div>
-    )
+    else {
+        if(!user.is_authorized) return(
+            <div>
+                You have not been authorized to create new tickets
+            </div>
+        )
+        else return(
+            <div>
+                <NewTicketForm queueList={queueList} userList={userList} onFormSubmit={onCreateTicket}/>
+            </div>
+        )
+    }
 }
 export default NewTicket

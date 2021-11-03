@@ -1,18 +1,22 @@
 import {useEffect, useState} from 'react'
 import { toast } from 'react-toastify'
-import { fetchSingleTicket, fetchQueues, createReply, updateTicketStatus } from '../../api/ticketApi'
+import { fetchSingleTicket, fetchQueues, createReply, updateTicketStatus, updateTicket } from '../../api/ticketApi'
 import Loader from '../common/Loader'
 import MessageDisplay from '../common/MessageDisplay'
 import MessageReply from '../common/MessageReply'
+import {useAuth} from '../../hooks'
+import {priorityMap} from '../../utils'
 
 function TicketView({match: {params}}) {
     const id = parseInt(params.id)
 
     const [data, setData] = useState(null)
-    const [edit, setEdit] = useState(false)
+    const [reply, setReply] = useState(false)
+    const [modify, setModify] = useState(false)
     const [queues, setQueues] = useState(null)
     const [loading, setLoading] = useState(true)
-    const [selectValues, setSelectValues] = useState({})
+    const [modifyValues, setModifyValues] = useState({})
+    const {user} = useAuth()
 
     useEffect(() =>{      
         (async () => {
@@ -29,10 +33,10 @@ function TicketView({match: {params}}) {
             else toast.error(res.error)
             setLoading(false)
         })()
-    }, [id, edit])
+    }, [id, modify, reply])
 
     const onChange = (e) =>{
-        setSelectValues(prev =>{
+        setModifyValues(prev =>{
             const data = {...prev}
             if(e.target.name === 'queue'){
                 data[e.target.name] =  parseInt(e.target.value)
@@ -45,12 +49,26 @@ function TicketView({match: {params}}) {
     }
 
     const handleSetReply = () => {
-        setSelectValues({
-            queue: data.queue.id,
-            priority: data.priority,
-            status: data.status,
-        })
-        setEdit(true)
+        if(!user.is_authorized){
+            toast.error('You have not been authorized to reply to tickets')
+        }
+        else  {
+            setReply(true)
+        }
+    }
+    
+    const handleSetModify = () => {
+        if(!user.is_authorized){
+            toast.error('You have not been authorized to modify tickets')
+        }
+        else  {
+            setModifyValues({
+                title: data.title,
+                queue: data.queue.id,
+                priority: 3,
+            })
+            setModify(true)
+        }
     }
     
     const handleReply = async (value) => {
@@ -62,41 +80,62 @@ function TicketView({match: {params}}) {
         setLoading(false)
         if(res.status === 'success'){
             toast.success('Reply Added Successfully')
-            setEdit(false)
+            setReply(false)
         }
         else{
             toast.error('An error occured')
+            setReply(false)
         }
-        // console.log(selectValues)
+    }
+
+    const handleModify = async () => {
+        const values = {...modifyValues, priority: priorityMap(modifyValues.priority)}
+        setLoading(true)
+        const res = await updateTicket(data.id, values)
+        setLoading(false)
+        if(res.status === 'success'){
+            toast.success('Ticket Modified Successfully')
+            setModify(false)
+        }
+        else{
+            toast.error('An error occured')
+            setModify(false)
+        }
+        setModify(false)
     }
 
     const changeTicketStatus = async () => {
-        setLoading(true)
-        const newStatus = data.status.toLowerCase() === 'open'
-        ? 2 
-        : 1
-        const res = await updateTicketStatus(data.id, newStatus)
-        if(res.status === 'success'){
-            toast.success('Ticket status Updated')  
-            setData(prev => ({
-                ...res.data, 
-                queue: prev.queue, 
-                created_date: prev.created_date
-            }))
+        if(!user.is_authorized){
+            toast.error('You have not been authorized to modify tickets')
         }
-        else{
-            toast.error('An error occured')
+        else  {
+            setLoading(true)
+            const newStatus = data.status.toLowerCase() === 'open'
+            ? 2 
+            : 1
+            const res = await updateTicketStatus(data.id, newStatus)
+            if(res.status === 'success'){
+                toast.success('Ticket status Updated')  
+                setData(prev => ({
+                    ...res.data, 
+                    queue: prev.queue, 
+                    created_date: prev.created_date
+                }))
+            }
+            else{
+                toast.error('An error occured')
+            }
+            setLoading(false)
         }
-        setLoading(false)
     }
 
     const displayMeta = () => {
-        if(edit) return(
+        if(modify) return(
             <div className="meta">
                 <p className={'created-by'}>{data.owner}</p>
                 <p className={'date-created'}>{`${data.created_date.toLocaleString()}`}</p>
                 <div className="edit-form">Queue: 
-                    <select name="queue" id="queue" value={selectValues['queue']} onChange={onChange}>
+                    <select name="queue" id="queue" value={modifyValues['queue']} onChange={onChange}>
                         <option value=''></option>
                         {queues.map(queue => 
                         (<option value={queue.id} key={queue.id}>{queue.title}</option>)
@@ -105,7 +144,7 @@ function TicketView({match: {params}}) {
                 </div>
                 <p className={'status'}>{data.status}</p>
                 <div className="edit-form">Priority: 
-                    <select name="priority" id="priority" onChange={onChange}>
+                    <select name="priority" id="priority" onChange={onChange} value={modifyValues['priority']}>
                         <option value='Critical'>Critical</option>
                         <option value='High'>High</option>
                         <option value='Normal'>Normal</option>
@@ -137,22 +176,13 @@ function TicketView({match: {params}}) {
                     :(
                     <div className={'content'}>    
                         <h2 className={'title'}>{data.title}</h2>
-                        {displayMeta()}
-                        <div className="message-list">
-                            <MessageDisplay author={data.owner} message={data.opening_text} date={data.created_date}/>
-                            {data.replies && data.replies.map(reply => <MessageDisplay 
-                            author={reply.author} 
-                            message={reply.message} 
-                            key={reply.date}
-                            date={reply.date}
-                            reply/>)}
-                            
-                        </div>
-                        
 
-                        <div>
-                            {!edit && <>
-                                <button className='btn btn-dark' onClick={handleSetReply}>Add Reply</button>
+                        {displayMeta()}
+
+                        <div className="interact">
+                            {!reply && !modify && <>
+                                <button className='btn btn-dark' onClick={handleSetReply}>Reply</button>
+                                <button className='btn btn-dark' onClick={handleSetModify}>Modify TIcket</button>
                                 <button className='btn btn-dark' onClick={changeTicketStatus}>
                                     {data.status.toLowerCase() === 'open'
                                     ?'Close Ticket'
@@ -160,10 +190,25 @@ function TicketView({match: {params}}) {
                                 }
                                 </button>
                             </>}
+                            {modify && <>
+                                <button className='btn btn-dark' onClick={handleModify}>Save</button>
+                            </>}
+                        </div>
+                        
+                        <div className="message-list">
+                            <MessageDisplay author={data.owner} message={data.opening_text} date={data.created_date} ticketOwner={data.owner} />
+                            {data.replies && data.replies.map(reply => (
+                            <MessageDisplay 
+                                author={reply.author}
+                                ticketOwner={data.owner} 
+                                message={reply.message} 
+                                key={reply.date}
+                                date={reply.date}
+                                reply/>
+                            ))}
                         </div>
 
-
-                        {edit && <MessageReply onCancel={() => setEdit(false)} handleReply={handleReply}/>}
+                        {reply && <MessageReply onCancel={() => setReply(false)} handleReply={handleReply}/>}
                     </div>
                     )
                     }

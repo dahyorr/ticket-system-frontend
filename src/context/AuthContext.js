@@ -35,6 +35,10 @@ export const AuthProvider = ({children}) => {
                 }
                 setLoading(false)
             }
+            else{
+                const res = await fetchUserData()
+                res.status === 'success' && setUser(res.data)
+            }
         })()
     }, [isSignedIn]);
 

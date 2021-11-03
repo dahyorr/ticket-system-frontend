@@ -1,7 +1,7 @@
 import axios from 'axios'
-
+const HOST = ''
 const TicketApi = axios.create({
-    baseURL: '/api',
+    baseURL: `${HOST}/api`,
 })
 
 export const routes = {
@@ -148,5 +148,6 @@ export const createTicket = async (data) => await defaultSendData(routes.tickets
 export const createReply = async (data) => await defaultSendData(routes.replies, data)
 
 export const updateTicketStatus = async (id, status) => await defaultPartialUpdateData(`${routes.tickets}${id}/`, {status})
+export const updateTicket = async (id, data) => await defaultPartialUpdateData(`${routes.tickets}${id}/`, data)
 
 export default TicketApi 

@@ -7,7 +7,7 @@ import { Context as TicketContext } from '../../context/TicketContext';
 
 const Header = ({history, location})=> {
     const [dropdownOpen, setDropdownOpen] = useState(false)
-    const {isSignedIn, signOut } = useAuth()
+    const {isSignedIn, signOut, user } = useAuth()
     const {resetTickets} = useContext(TicketContext)
 
     const onSignOut = () => {
@@ -31,6 +31,7 @@ const Header = ({history, location})=> {
                 {dropdownOpen?(<div className="dropdown" onClick={(e) => {e.stopPropagation(); setDropdownOpen(false)}}>
                     {/* <Link to="#" className="dropdown-item">Settings</Link> */}
 
+                    <div className="dropdown-item fixed">{user.email}</div>
                     <Link to="#" onClick={onSignOut} className="dropdown-item">Sign out</Link>
                 </div>): null}
                 </>

@@ -19,7 +19,6 @@
         .meta{
             font-size: 0.9rem;
             color: darkgray;
-            margin-bottom: 1rem;
             p{margin: 0.2rem 0;};
             .edit-form{
                 color: black;
@@ -29,6 +28,9 @@
                     margin-left: 0.5rem ;
                 }
             }
+        }
+        .interact{
+            margin: 1rem 0;
         }
     }
 }

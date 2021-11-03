@@ -1,10 +1,10 @@
-const MessageDisplay = ({author, message, reply, date}) => {
+const MessageDisplay = ({author, message, reply, date, ticketOwner}) => {
     const parsedDate = new Date(date).toLocaleString()
     const sampleMessage = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus minus dicta velit, a asperiores necessitatibus ipsam porro corporis mollitia aperiam.'
     return (
         <div className={'MessageDisplay'} style={reply?{marginLeft: '1rem'}:{}}>
             <div className='flex'>
-                {!reply
+                {author === ticketOwner
                 ?<div className='pointer pointer-author'></div>
                 :<div className='pointer'></div>
                 }
