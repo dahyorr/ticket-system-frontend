@@ -1,5 +1,5 @@
 import axios from 'axios'
-const HOST = ''
+const HOST = window.location.origin
 const TicketApi = axios.create({
     baseURL: `${HOST}/api`,
 })
@@ -17,6 +17,9 @@ export const routes = {
     userTickets: `tickets/?user=1`,
     openTickets: 'tickets/?status=1',
     replies: 'replies/',
+    notifications: 'notifications/',
+    allNotifications: 'notifications/?all=1',
+    // notificationWebSocket: `${HOST.replace(/^http/, 'ws')}/ws/tickets/`,
 }
 
 const getFromStore = (key) => localStorage.getItem(key)
@@ -48,7 +51,7 @@ const defaultRequest = async (route, requestType, requestData=null) =>{
             return {status: 'error', error: err}
         }
     }
-    return 
+    return {status: 'error', error: "No Token"}
 }
 
 const defaultFetchData = async (route) => {
@@ -143,11 +146,45 @@ export const fetchSingleTicket = async (id) => await defaultFetchData(`${routes.
 export const fetchUserList = async () => await defaultFetchData(routes.userList)
 export const fetchAuthorizedUserList = async () => await defaultFetchData(routes.authorizedUserList)
 export const fetchQueues = async () => await defaultFetchData(routes.queues)
+export const fetchUserNotifications = async () => await defaultFetchData(routes.notifications)
+export const fetchAllUserNotifications = async () => await defaultFetchData(routes.allNotifications)
 
 export const createTicket = async (data) => await defaultSendData(routes.tickets, data)
 export const createReply = async (data) => await defaultSendData(routes.replies, data)
 
 export const updateTicketStatus = async (id, status) => await defaultPartialUpdateData(`${routes.tickets}${id}/`, {status})
 export const updateTicket = async (id, data) => await defaultPartialUpdateData(`${routes.tickets}${id}/`, data)
+
+// export class NotificationSocket {
+//     constructor(onReceive){
+//         this.onReceive = onReceive
+//         this.initialize()
+
+//     }
+
+//     async initialize(){
+//         await refreshToken()
+//         let token = getFromStore('accessToken')
+//         if(token){
+//             this.ws = new WebSocket(`${routes.notificationWebSocket}?token=${token}`)
+
+//             this.ws.onopen = (e) => {
+//                 console.log('connected to socket')
+//             };
+
+//             this.ws.onmessage = function(event) {
+//                 console.debug("WebSocket message received:", event);
+//                 this.onReceive(event)
+//             };
+//         }
+//     }
+
+//     close(){
+//         if(this.ws){
+//             console.log('closing connection')
+//             this.ws.close()
+//         }
+//     }
+// }
 
 export default TicketApi 

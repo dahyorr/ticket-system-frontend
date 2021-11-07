@@ -8,7 +8,6 @@ const Login = ({history,location}) => {
     const queryString = location.search;
     const sp = new URLSearchParams(queryString);
     const next = sp.get('next')
-    console.log(next)
     const {logIn} = useAuth() 
 
     const onLogin = async ({email, password}) => {

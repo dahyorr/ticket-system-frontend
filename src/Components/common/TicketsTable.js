@@ -17,11 +17,16 @@ const useStyles = makeStyles({
 
 const getMuiTheme = () => createMuiTheme({
     overrides:{
-        'MUIDataTable': {
+        MuiDataTable: {
             paper: {
                 maxHeight: '100%'
             }
         },
+        MuiTableCell: {
+            head: {
+                zIndex: '0 !important'
+            }
+        }        
     }
 })
 

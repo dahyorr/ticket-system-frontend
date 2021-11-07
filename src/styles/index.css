@@ -180,6 +180,7 @@ p {
   position: fixed;
   width: 100%;
   top: 0;
+  position: fixed;
 }
 
 .Header .nav {
@@ -245,7 +246,7 @@ p {
   top: 50px;
   right: 0;
   border-radius: 10px;
-  width: 150px;
+  min-width: 150px;
   box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
   box-sizing: initial;
 }
@@ -497,6 +498,11 @@ p {
   width: 100%;
 }
 
+.Dashboard .platform .message {
+  margin-top: 2.5rem;
+  text-align: center;
+}
+
 .Tickets {
   height: 100%;
 }
@@ -693,4 +699,53 @@ p {
   display: flex;
   background-color: #f2f2f2;
   align-items: center;
+}
+
+.Notification {
+  width: 500px;
+  height: 300px;
+  background-color: white;
+  border-radius: 5px;
+  position: absolute;
+  top: 50px;
+  right: 10px;
+  box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  overflow: auto;
+  z-index: 100;
+}
+
+.Notification .no-notification {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.Notification .NotificationItem {
+  min-height: 60px;
+  border-bottom: 1px solid grey;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.Notification .NotificationItem:hover {
+  background-color: #f2f2f2;
+}
+
+.Notification .NotificationItem .pointer {
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  margin-right: 10px;
+  background: #2D3047;
+}
+
+.Notification .NotificationItem .content {
+  width: 90%;
+}
+
+.Notification .NotificationItem .content p {
+  font-size: 0.85rem;
+  max-width: 100%;
+  margin: 0 0 0.2rem 0;
 }
