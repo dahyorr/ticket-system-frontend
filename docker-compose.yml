@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    image: ticket-system-frontend
+    volumes:
+      - ./src:/code/src
+      - ./public:/code/public
+    ports:
+      - 3000:3000
+    command: npm start
