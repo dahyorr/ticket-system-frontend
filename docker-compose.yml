@@ -5,8 +5,12 @@ services:
     build: .
     image: ticket-system-frontend
     volumes:
-      - ./src:/code/src
-      - ./public:/code/public
+      - ./frontend:/code
+      - notused:/code/node_modules
+    stdin_open: true
     ports:
       - 3000:3000
     command: npm start
+
+volumes:
+  notused:
