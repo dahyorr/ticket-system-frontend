@@ -1,5 +1,5 @@
 import axios from 'axios'
-const HOST = window.location.origin
+const HOST = 'https://ticketrr.herokuapp.com'
 const TicketApi = axios.create({
     baseURL: `${HOST}/api`,
 })
