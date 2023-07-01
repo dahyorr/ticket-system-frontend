@@ -1,5 +1,5 @@
 import axios from 'axios'
-const HOST = 'https://tickerr-api.onrender.com
+const HOST = 'https://tickerr-api.onrender.com'
 const TicketApi = axios.create({
     baseURL: `${HOST}/api`,
 })
